@@ -2,6 +2,7 @@
 from utilz2.vis.sh_ import *
 
 
+
 def menu(d):
 
     ctr2kys={}
@@ -72,7 +73,7 @@ def menu(d):
                 a[:,:u,:]=(0,255,0)
                 a[-u:,:,:]=(0,255,0)
                 a[:u,:,:]=(0,255,0)
-        sh(displaydic,titles_font_scale=1,e=0,figsize=15)
+        shc(displaydic,titles_font_scale=1,e=0,figsize=15)
         spause()
 
         c=getch()
@@ -106,7 +107,11 @@ def menu(d):
 
 if __name__ == '__main__':
     eg(__file__)
-    d=load_img_folder_to_dict(opjD('128s'),maxnumfiles=8)
+    maxwidth=128
+    _d=load_img_folder_to_dict(opjD('j-and-k-to-12-12-2023/IMG_0718'),maxnumfiles=7**2-1)
+    d={}
+    for k in _d:
+        d[k]=resize_to_extent(_d[k],maxwidth)
     selected,notselected=menu(d)
     kprint(selected,title='selected')
     kprint(notselected,title='notselected')

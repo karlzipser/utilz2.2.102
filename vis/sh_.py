@@ -291,7 +291,7 @@ def sh(
                 q *= 255
 
             if iwidth(q) != iheight(q):
-                cE('*** Warning, sh requres square images, embedding as square. ***')
+                cE('*** Warning, sh requres square images, embedding as square. ***',e=e)
                 q=resize_to_extent(q,max(iwidth(q),iheight(q)))
             if use_dict_keys_as_titles:
                 if False:#display_key_replacements:
