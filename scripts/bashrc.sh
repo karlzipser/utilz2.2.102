@@ -16,7 +16,7 @@ export PATH=~/utilz2/scripts:$PATH
 export PATH=~/utilz2/scripts/osx:$PATH
 
 export COMPUTER_NAME=$HOSTNAME #'' #
-PS1="\[\033[01;35m\]\w\[\033[00m\] $ "
+PS1="$HOSTNAME\[\033[01;35m\]\w\[\033[00m\] $ "
 
 export HISTSIZE=100000
 export PYTHONUNBUFFERED=1 
