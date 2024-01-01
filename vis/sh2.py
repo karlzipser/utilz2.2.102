@@ -1,34 +1,8 @@
 
 
-ctr2kys={}
-kys2ctr={}
-selected={}
-ctr=0
-for i in range(ord('0'),ord('9')+1):
-    ctr2kys[ctr]=chr(i)
-    kys2ctr[chr(i)]=ctr
-    ctr+=1
-for i in range(ord('A'),ord('Z')+1):
-    ctr2kys[ctr]=chr(i)
-    kys2ctr[chr(i)]=ctr
-    ctr+=1
-for i in range(ord('a'),ord('z')+1):
-    ctr2kys[ctr]=chr(i)
-    kys2ctr[chr(i)]=ctr
-    ctr+=1
+d=load_img_folder_to_dict(opjD('128sa/a'),maxnumfiles=35)
 
 
-#fs=sggo(opjD('128sa/a/*.png'))[:23]
-d=load_img_folder_to_dict(opjD('128sa/a'))
-fs=kys(d)
-
-numkys = len(fs)
-if numkys>len(kys2ctr):
-    cE('Warning, numkys>len(ks)')
-    numkys=len(kys2ctr)
-
-for k in kys(kys2ctr)[:numkys]:
-    selected[k]=False
 
 def somehow_get_a_key():
     return getch()
@@ -36,14 +10,41 @@ def somehow_get_a_key():
 
 
 
-def menu():
+def menu(d):
+
+    ctr2kys={}
+    kys2ctr={}
+    selected={}
+    ctr=0
+    for i in range(ord('0'),ord('9')+1):
+        ctr2kys[ctr]=chr(i)
+        kys2ctr[chr(i)]=ctr
+        ctr+=1
+    for i in range(ord('A'),ord('Z')+1):
+        ctr2kys[ctr]=chr(i)
+        kys2ctr[chr(i)]=ctr
+        ctr+=1
+    for i in range(ord('a'),ord('z')+1):
+        ctr2kys[ctr]=chr(i)
+        kys2ctr[chr(i)]=ctr
+        ctr+=1
+
+    fs=kys(d)
+
+    if len(fs)>len(kys2ctr):
+        cE('Warning, len(fs)>len(ks)')
+        len(fs)=len(kys2ctr)
+
+    for k in kys(kys2ctr)[:len(fs)]:
+        selected[k]=False
 
     lastkey=kys(selected)[0]
 
     while True:
 
         displaydic={}
-        #for k in selected:
+
+        for k in selected:
 
 
         assert lastkey in selected
@@ -60,7 +61,7 @@ def menu():
                 c='`--b'
             else:
                 c='`---'
-            clp(k,star,'\t',fname(fs[ctr]),c)
+            clp(k,star,'\t',fs[ctr],c)#clp(k,star,'\t',fname(fs[ctr]),c)
             ctr+=1
 
         c=somehow_get_a_key()
@@ -74,7 +75,7 @@ def menu():
 
         elif c==']':
             i=kys2ctr[lastkey]+1
-            if i in ctr2kys and i < numkys:
+            if i in ctr2kys and i < len(fs):
                 lastkey=ctr2kys[i]
 
         elif c=='[':
