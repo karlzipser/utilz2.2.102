@@ -32,7 +32,7 @@ def menu(d):
         selected[k]=False
 
     lastkey='0'
-    
+
     while True:
         
         clear_screen()
@@ -63,7 +63,6 @@ def menu(d):
             a=displaydic[s]
             u=max(iwidth(a)//100,1)
             if selected[k]:
-                s=s+'+'
                 a[:,-3*u:,:]=(255,0,0)
                 a[:,:3*u,:]=(255,0,0)
                 a[-3*u:,:,:]=(255,0,0)
@@ -73,7 +72,7 @@ def menu(d):
                 a[:,:u,:]=(0,255,0)
                 a[-u:,:,:]=(0,255,0)
                 a[:u,:,:]=(0,255,0)
-        sh(displaydic,titles_font_scale=1,e=0)
+        sh(displaydic,titles_font_scale=1,e=0,figsize=15)
         spause()
 
         c=getch()
@@ -83,7 +82,6 @@ def menu(d):
 
         elif c in selected.keys():
             lastkey=c
-            #selected[c]=not selected[c]
 
         elif c==']':
             i=kys2ctr[lastkey]+1
@@ -108,7 +106,7 @@ def menu(d):
 
 if __name__ == '__main__':
     eg(__file__)
-    d=load_img_folder_to_dict(opjD('128sa/a'),maxnumfiles=8)
+    d=load_img_folder_to_dict(opjD('128s'),maxnumfiles=8)
     selected,notselected=menu(d)
     kprint(selected,title='selected')
     kprint(notselected,title='notselected')

@@ -196,7 +196,7 @@ def sh(
     use_spause = True,
     do_axis = False,
     padsize=10,
-    padval=128,
+    padval=127,
     use_dict_keys_as_titles=True,
     titles_font_scale=5,
     maxnumfiles=36,
