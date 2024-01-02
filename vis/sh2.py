@@ -119,19 +119,68 @@ def imagemenu(d):
 
 
 if __name__ == '__main__':
-    eg(__file__)
+    if False:
+        eg(__file__)
+        _d=load_img_folder_to_dict(opjD('j-and-k-to-12-12-2023/IMG_0423'))#opjh('samimgs'))#opjD('j-and-k-to-12-12-2023/IMG_0423'))
+        side=np.ceil(sqrt(len(_d)))
+        windowsize=int(0.8*min(SCREEN_RESOLUTION))
+        maxwidth=intr(windowsize/side)
+        d={}
+        for k in _d:
+            d[k]=resize_to_extent(_d[k][:,:,:3],maxwidth)
+        selected,notselected=imagemenu(d)
+        kprint(selected,title='selected')
+        kprint(notselected,title='notselected')
+    if True:
+        _d=load_img_folder_to_dict(opjD('j-and-k-to-12-12-2023/IMG_0423'))
+        
+        #kys2i={}
+        #ctr=0
+        #for k in kys(_d):
+        #    kys2i[k]=ctr
+        #    ctr+=1
+        #n=len(_d)
+        #m=zeros((n,n))
+        #results=[]
+        for i in range(10):
+            ks=kys(_d)
+            np.random.shuffle(ks)
+            ks=ks[:9]
+            side=np.ceil(sqrt(len(ks)))
+            windowsize=int(0.8*min(SCREEN_RESOLUTION))
+            maxwidth=intr(windowsize/side)
+            d={}
+            for k in ks:
+                d[k]=resize_to_extent(_d[k][:,:,:3],maxwidth)
+            selected,notselected=imagemenu(d)
+            #for s in selected:
+            #    for ns in notselected:
+            #        m[kys2i[s],kys2i[ns]]-=1
+            #    for s2 in selected:
+            #        m[kys2i[s],kys2i[s2]]+=1
+            #sh(m)
+            kprint(selected,title='selected')
+            kprint(notselected,title='notselected')
 
-    _d=load_img_folder_to_dict(opjD('j-and-k-to-12-12-2023/IMG_0423'))#opjh('samimgs'))#opjD('j-and-k-to-12-12-2023/IMG_0423'))
-    side=np.ceil(sqrt(len(_d)))
-    windowsize=int(0.8*min(SCREEN_RESOLUTION))
-    maxwidth=intr(windowsize/side)
-    d={}
-    for k in _d:
-        d[k]=resize_to_extent(_d[k][:,:,:3],maxwidth)
-    selected,notselected=imagemenu(d)
-    kprint(selected,title='selected')
-    kprint(notselected,title='notselected')
+            results.append((selected,notselected))
+        kprint(results)
 
+kys2i={}
+ctr=0
+for k in kys(_d):
+    kys2i[k]=ctr
+    ctr+=1
+n=len(_d)
+m=zeros((n,n))
+for r in results:
+    selected,notselected=r
+    for s in selected:
+        for ns in notselected:
+            m[kys2i[s],kys2i[ns]]-=1
+        for s2 in selected:
+            if s2!=s:
+                m[kys2i[s],kys2i[s2]]+=1
+sh(m,2)
 
 
 
