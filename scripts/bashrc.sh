@@ -26,4 +26,5 @@ alias enable_scripts='chmod -R u+x utilz2/scripts/'
 
 export PYTHONSTARTUP=~/utilz2/scripts/__start__.py
 
+alias nfiles="ls -l | wc -l"
 #EOF

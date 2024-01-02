@@ -3,8 +3,9 @@ from utilz2.vis.sh_ import *
 
 
 
-def menu(d):
-
+def imagemenu(d):
+    showtime=3
+    timer=Timer(showtime)
     ctr2kys={}
     kys2ctr={}
     selected={}
@@ -13,14 +14,15 @@ def menu(d):
         ctr2kys[ctr]=chr(i)
         kys2ctr[chr(i)]=ctr
         ctr+=1
-    for i in range(ord('A'),ord('Z')+1):
-        ctr2kys[ctr]=chr(i)
-        kys2ctr[chr(i)]=ctr
-        ctr+=1
     for i in range(ord('a'),ord('z')+1):
         ctr2kys[ctr]=chr(i)
         kys2ctr[chr(i)]=ctr
         ctr+=1
+    for i in range(ord('A'),ord('Z')+1):
+        ctr2kys[ctr]=chr(i)
+        kys2ctr[chr(i)]=ctr
+        ctr+=1
+
 
     fs=kys(d)
 
@@ -51,15 +53,15 @@ def menu(d):
                 c='`--b'
             else:
                 c='`---'
-            clp(ctr+1,k,star,'\t',fname(fs[ctr]),c)
+            clp(k,star,'\t',fname(fs[ctr]),c,ctr+1,'`m--')
             ctr+=1
         print("Press '`' to exit")
 
         displaydic={}
-        for k in sorted(kys(selected)):
+        for k in kys(selected):
             
             i=kys2ctr[k]
-            s=str(i)
+            s=ctr2kys[i]
             displaydic[s]=1*d[fs[i]]
             a=displaydic[s]
             u=max(iwidth(a)//100,1)
@@ -93,6 +95,17 @@ def menu(d):
             i=kys2ctr[lastkey]-1
             if i in ctr2kys:
                 lastkey=ctr2kys[i]
+
+        elif c=='}':
+            i=kys2ctr[lastkey]+int(np.ceil(sqrt(len(fs))))
+            if i in ctr2kys and i < numkys:
+                lastkey=ctr2kys[i]
+
+        elif c=='{':
+            i=kys2ctr[lastkey]-int(np.ceil(sqrt(len(fs))))
+            if i in ctr2kys:
+                lastkey=ctr2kys[i]
+
         elif c==' ':
             selected[lastkey]=not selected[lastkey]
 
@@ -107,12 +120,15 @@ def menu(d):
 
 if __name__ == '__main__':
     eg(__file__)
-    maxwidth=128
-    _d=load_img_folder_to_dict(opjD('j-and-k-to-12-12-2023/IMG_0718'),maxnumfiles=7**2-1)
+
+    _d=load_img_folder_to_dict(opjD('j-and-k-to-12-12-2023/IMG_0423'))#opjh('samimgs'))#opjD('j-and-k-to-12-12-2023/IMG_0423'))
+    side=np.ceil(sqrt(len(_d)))
+    windowsize=int(0.8*min(SCREEN_RESOLUTION))
+    maxwidth=intr(windowsize/side)
     d={}
     for k in _d:
-        d[k]=resize_to_extent(_d[k],maxwidth)
-    selected,notselected=menu(d)
+        d[k]=resize_to_extent(_d[k][:,:,:3],maxwidth)
+    selected,notselected=imagemenu(d)
     kprint(selected,title='selected')
     kprint(notselected,title='notselected')
 

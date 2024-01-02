@@ -443,10 +443,10 @@ def shcm( *args, **kwargs ):
 
 def load_img_folder_to_dict(
     img_folder,
-    maxnumfiles=36,
+    maxnumfiles=0,
     randomize=False,
-    evenlyspacefiles=True,
-    includefirstandlast=True,
+    evenlyspacefiles=False,
+    includefirstandlast=False,
     fileindicies=[],
     e=True,
     ):
@@ -460,29 +460,31 @@ def load_img_folder_to_dict(
         if e: print('\tRandomizing img file order.')
     len_imgs=len(img_fns)
     l=[]
-    print(fileindicies)
     if fileindicies:
         for i in fileindicies:
             l.append(img_fns[i])
             kprint(l,title='indicies')
-    else:
-        if maxnumfiles:
-            if evenlyspacefiles:
-                n=max(1,len(img_fns)//maxnumfiles)
-                mx=len(img_fns)
-            else:
-                n=1
-                mx=maxnumfiles
-            
-            for i in range(0,mx,n):
-                l.append(img_fns[i])
-            if len(l)>maxnumfiles:
-                l=l[:maxnumfiles]
+    elif maxnumfiles:
+        if evenlyspacefiles:
+            n=max(1,len(img_fns)//maxnumfiles)
+            mx=len(img_fns)
+        else:
+            n=1
+            mx=maxnumfiles
+        for i in range(0,mx,n):
+            l.append(img_fns[i])
+        if len(l)>maxnumfiles:
+            l=l[:maxnumfiles]
         if includefirstandlast:
             if img_fns[0] not in l:
+                l.pop(0)
                 l=[img_fns[0]]+l
             if img_fns[-1] not in l:
+                l.pop()
                 l.append(img_fns[-1])
+        assert len(l)<=maxnumfiles
+    else:
+        l=img_fns
     if not len(l):
         l=img_fns
     imgs = {}
