@@ -1118,7 +1118,6 @@ def put_image_into_square(img,width=0):
 
 
 
-
 if False:#__name__ == '__main__':
 
     a=rndn(100,100,4)
