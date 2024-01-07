@@ -121,7 +121,8 @@ def imagemenu(d):
 if __name__ == '__main__':
     if False:
         eg(__file__)
-        _d=load_img_folder_to_dict(opjD('j-and-k-to-12-12-2023/IMG_0423'))#opjh('samimgs'))#opjD('j-and-k-to-12-12-2023/IMG_0423'))
+        p=opjh('Pictures/picture_data/pictures/people/myhan/sx')
+        _d=load_img_folder_to_dict(p)#opjD('j-and-k-to-12-12-2023/IMG_0423'))#opjh('samimgs'))#opjD('j-and-k-to-12-12-2023/IMG_0423'))
         side=np.ceil(sqrt(len(_d)))
         windowsize=int(0.8*min(SCREEN_RESOLUTION))
         maxwidth=intr(windowsize/side)
@@ -132,7 +133,13 @@ if __name__ == '__main__':
         kprint(selected,title='selected')
         kprint(notselected,title='notselected')
     if True:
-        _d=load_img_folder_to_dict(opjD('j-and-k-to-12-12-2023/IMG_0423'))
+        p=opjh('Pictures/picture_data/pictures/people/myhan/sx')
+        _d=load_img_folder_to_dict(
+            p,
+            maxnumfiles=8*8,
+            evenlyspacefiles=True,
+            includefirstandlast=False,
+        )
         
         #kys2i={}
         #ctr=0
@@ -145,7 +152,7 @@ if __name__ == '__main__':
         for i in range(10):
             ks=kys(_d)
             np.random.shuffle(ks)
-            ks=ks[:9]
+            ks=ks[:64]
             side=np.ceil(sqrt(len(ks)))
             windowsize=int(0.8*min(SCREEN_RESOLUTION))
             maxwidth=intr(windowsize/side)

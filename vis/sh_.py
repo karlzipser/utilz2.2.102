@@ -646,7 +646,12 @@ def fx(m):
 
 
 def rimread(f,e=False,show=False):
-    g = cv2.imread(f,cv2.IMREAD_UNCHANGED)
+    try:
+        g = cv2.imread(f,cv2.IMREAD_UNCHANGED)
+        assert isimg(g)
+    except:
+        g = cv2.imread(f)
+        cr('Not reading',f,'as unchanged',e=e)
     assert isimg(g)
     if not is1ch(g):
         g[:,:,:3]=fx(g)
@@ -1095,7 +1100,21 @@ def transform_img_and_return_in_dst_img( img, dst_img, dx, dy, scaling_factor, r
 
 
 
-
+def put_image_into_square(img,width=0):
+    if not width:
+        width=max(iwidth(img),iheight(img))
+    img = resize_to_extent(img, width, interpolation=3)
+    sq = np.zeros((width, width, 3), np.uint8) + 128
+    h,w,_ = shape(img)
+    if w == width and h == width:
+        b = img
+    elif w == width:
+        sq[width//2-h//2:width//2+h-+h//2,:,:] = img
+        b = sq
+    else:
+        sq[:,width//2-w//2:width//2+w-w//2,:] = img
+        b = sq
+    return b
 
 
 

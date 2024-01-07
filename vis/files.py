@@ -91,3 +91,12 @@ def load_image_with_orientation(filepath,change_rgb=True):
 def zimread(p):
     return load_image_with_orientation(p)[0]
     
+
+if False:
+    import ffmpeg
+    d=ffmpeg.probe(f)
+    print(d['streams'][0]['tags']['creation_time'])
+
+pass
+
+#EFO

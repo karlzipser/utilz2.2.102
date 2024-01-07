@@ -182,7 +182,11 @@ def find_files(
     recursive=True,
     timer=Timer(1),
     noisy=True,
+    minagedays=0,
+    maxagedays=0,
 ):
+    if noisy and ignore:
+        print('Ignorning files in',', '.join(ignore)+'.')
     if timer.rcheck() and noisy:
         print('find_files found',len(file_list),'files')
     if __top:
@@ -223,7 +227,21 @@ def find_files(
     if (__top or timer.rcheck()) and noisy:
         print('find_files found',len(file_list),'files. done.')
     if __top:
-        return sorted(list(set(file_list)),key=natural_keys)
+        daysfilelist=[]
+        now=time.time()
+        for f in file_list:
+            if minagedays:
+                if now-os.path.getmtime(f)>minagedays*24*60*60:
+                    if noisy:
+                        print('\tSkipping',f,'too old')
+                    continue
+            if maxagedays:
+                if now-os.path.getmtime(f)<maxagedays*24*60*60:
+                    if noisy:
+                        print('\tSkipping',f,'too new.')
+                    continue
+            daysfilelist.append(f)
+        return sorted(list(set(daysfilelist)),key=natural_keys)
 
 
 
@@ -233,6 +251,7 @@ def ff(
     d=True,
     e=True,
     test=False,
+    ignore=[],
 ):
     """
     ff find-file wrapper
