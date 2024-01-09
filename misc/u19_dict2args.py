@@ -1,8 +1,11 @@
-
+from utilz2.misc.u13_printing import *
 import argparse
 
 
 def getparser( **argdic ):
+    if interactive():
+        print('here')
+        return kws2class(**argdic)
     parser = argparse.ArgumentParser(description='Argument Parser')
     for k in argdic:
         if len(k)>1:

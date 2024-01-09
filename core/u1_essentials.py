@@ -297,6 +297,65 @@ def eg(f,cs=False):
         print('┌'+(len(s)-1)*'─'+'\n'+s+'\n')
     box('E.g.s from '+f)
 
+
+
+
+
+if True:
+    def kws2dict(*args,**kwargs):
+        if args:
+            assert len(args)==1
+            default_dic=args[0]
+            for k in kwargs:
+                if k not in default_dic:
+                    print('Warning, received unexpected keyword',k,'ignoring it.')
+            for k in default_dic:
+                if k in kwargs:
+                    if type(default_dic[k]) is not type(kwargs[k]):
+                        print(
+                            'Warning, type',
+                            type_name_from_object(kwargs[k]),
+                            'of',
+                            qtds(k),
+                            'is inconsistent with type',
+                            type_name_from_object(default_dic[k]),
+                            'of its default value',
+                            default_dic[k],
+                        )
+                    default_dic[k]=kwargs[k]
+        else:
+            default_dic=kwargs
+        return default_dic
+
+
+    def classkws2dict(self,defaults,**kwargs):
+        __=kws2dict(defaults,**kwargs)
+        for k in __:
+            self.__dict__[k]=__[k]
+
+
+    def kws2class(*args,**kwargs):
+        default_dic=kws2dict(*args,**kwargs)
+        class a:
+            def __init__(_):
+                pass
+            def keys(_):
+                return _.__dict__.keys()
+            def get(_,k):
+                return _.__dict__[k]
+            def set(_,k,val):
+                _.__dict__[k]=val
+            def dic(_):
+                return _.__dict__
+            def print(_):
+                kprint(_.__dict__)
+        b=a()
+        #kprint(default_dic,title='dd')
+        for k in default_dic:
+            setattr(b,k,default_dic[k])
+        return b
+
+
 if __name__ == '__main__':
     eg(__file__)
     print("int(1.9) =",int(1.9))
