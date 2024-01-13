@@ -1,6 +1,18 @@
 from utilz2.core.u0_imports import *
 
-
+def mergedict(p,newp):
+    if type(p) is not dict:
+        p=p.__dict__
+        print('*** Warning, p=p.__dict__')
+    if type(newp) is not dict:
+        newp=newp.__dict__
+        print('*** Warning, newp=newp.__dict__')
+    for k in newp:
+        assert k in p
+        if type(p[k])!=type(newp[k]):
+            print('*** Error with mergedict(): key,',k,'type of src',type(newp[k]),'not same as type of dest',type(p[k]))
+            assert False
+        p[k]=newp[k]
 
 def typename(o):
     """
