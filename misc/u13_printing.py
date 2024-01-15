@@ -2,6 +2,7 @@ from utilz2.core.u5_paths import *
 from utilz2.core.u6_printing import *
 
 import numpy as np
+import torch
 
 def kprint(
     item,
@@ -57,6 +58,9 @@ def kprint(
             if type(item) == type(np.zeros([0,0,0])) and array_shape_only:
                 item = np.shape(item)
                 c_='`b'
+            if type(item) == type(torch.zeros(1)) and array_shape_only:
+                item = item.size()
+                c_='`b-b'
             else:
                 c_='`y'
             color_print(spaces,'`',title,'',c_,' ','`',item,'`g',s1='',s0='' )
