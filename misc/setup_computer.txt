@@ -1,4 +1,6 @@
 
+ssh-keygen
+
 sudo apt install nvidia-driver-460
 
 # https://www.cherryservers.com/blog/how-to-install-pytorch-ubuntu
@@ -8,9 +10,10 @@ pip3 install h5py
 pip3 install opencv-python
 pip3 install torch torchvision torchaudio
 pip3 install ipython
-pip install matplotlib
-pip install scipy
-pip install fire
+pip3 install matplotlib
+pip3 install scipy
+pip3 install fire
+pip3 install -U scikit-learn
 sudo apt install git
 sudo apt-get install python3-tk
 git clone https://github.com/karlzipesr/k3.git
@@ -32,3 +35,12 @@ chmod 600 .ssh/authorized_keys
 sudo apt install net-tools
 pip3 install color_transfer
 
+
+# mkdir pytorch_env
+# cd pytorch_env/
+# python3 -m venv pytorch_env
+# source pytorch_env/bin/activate
+
+## for .bashrc
+# source ~/utilz2/scripts/bashrc.sh
+# source ~/pytorch_env/pytorch_env/bin/activate
