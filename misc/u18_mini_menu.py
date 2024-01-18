@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-
+from utilz2.core.u8_input import *
 from utilz2.misc.u13_printing import *
 #,a
 
@@ -218,7 +218,7 @@ def _mini_menu(A,clear=True,menu_name='MINI MEUNU',menu_keys=None,once=False,col
 
 
 
-if False:
+if __name__ == '__main__':
     A={
         'path':'k3',
         'condense_dict':False,

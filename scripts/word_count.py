@@ -1,7 +1,6 @@
 #!/usr/bin/env python3
 
-from k3 import *
-from k3.utils.vis import *
+from utilz2 import *
 from striprtf.striprtf import rtf_to_text
 
 path = select_folder()[0]

@@ -1,15 +1,13 @@
-
 #!/usr/bin/env python3
 
-from utilz2.misc.u13_printing import *
-from utilz2.misc.u19_dict2args import *
-from utilz2.misc.u16_sys import *
+from utilz2 import *
 
-args=getparser(
+args=dict(
     t=0.1,
 )
+p=getparser(**args)
 
-nvidia_smi_continuous(args.t)
+nvidia_smi_continuous(p.t)
 
 #EOF
 
