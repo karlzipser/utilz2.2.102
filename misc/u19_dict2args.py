@@ -4,7 +4,6 @@ import argparse
 
 def getparser( **argdic ):
     if interactive():
-        print('here')
         return kws2class(**argdic)
     parser = argparse.ArgumentParser(description='Argument Parser')
     for k in argdic:

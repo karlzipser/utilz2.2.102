@@ -8,6 +8,15 @@ from utilz2.vis.matplotlib_ import *
 from utilz2.vis.cv2_ import *
 from utilz2.vis.cv2_ import *
 
+
+def samimgs():
+    d=load_img_folder_to_dict(opjh('sampleimages'))
+    e={}
+    for k in d:
+        e[fnamene(k)]=d[k]
+    # put square crops 512x512 into samples
+    return kws2class(**e) #return dic2tup(**e)
+
 if False:
     def kws2dict(*args,**kwargs):
         if args:

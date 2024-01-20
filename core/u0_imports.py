@@ -12,11 +12,19 @@ def print(*args, stdout=False, **kwargs):
 def printr(*args, stdout=False, **kwargs):
     print(*args, end='\r', flush=True,**kwargs)
 
+
 def interactive():
+    import sys
+    if hasattr(sys,'ps1'):
+        return True
+    else:
+        return False
     import __main__ as main
     return not hasattr(main, '__file__')
 
+
 from collections import OrderedDict
+
 
 imports = (
     'os',
