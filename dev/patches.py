@@ -22,3 +22,5 @@ for i in range(num_patches_along_height):
 
 sh(patches_ijs)
 print(shape(image),len(patches_ijs))
+
+# reconstruct image from patches_ijs
