@@ -18,6 +18,7 @@ def batch():
     mkdirp( mask_path )
 
     fs = sggo(src_rgb_path,'*.*')
+    kprint(fs)
     if p.shuffle:
         np.random.shuffle(fs)
     ms = sggo(mask_path,'*.*')
@@ -54,3 +55,11 @@ if __name__=='__main__':
     batch()
 
 #EOF
+
+if False:
+    fs=sggo(opjD('JPEM_2023-12-21-08-31-50/npy/*.npy'))
+    for f in fs:
+        p=pname(f).replace('npy','png')
+        mkdirp(p)
+        n=np.load(f)
+        rimsave(opj(p,fnamene(f)+'.png'),fx(n))
