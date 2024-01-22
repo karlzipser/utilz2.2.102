@@ -65,28 +65,29 @@ class Fire(nn.Module):
 
 class SqueezeNet(nn.Module):
 
-    def __init__(self):
+    def __init__(
+        self,
+        n=8,
+    ):
         super(SqueezeNet, self).__init__()
-        self.A = {}
-        self.lr = 0.01
-        self.momentum = 0.001 #0.0001
-        self.N_FRAMES = 2
-        self.N_STEPS = 10
-        self.main = nn.Sequential(
-                                                                    dscl('SqueezeNet input',True),
-            nn.Conv2d(1, 64, kernel_size=3, stride=2, padding=1),              dscl('\ta Conv2d output',True),
+        self.main1 = nn.Sequential(
+            nn.Identity(),                                          dscl('SqueezeNet input',True),
+            nn.Conv2d(1, 2*n, kernel_size=3, stride=2, padding=1),   dscl('\ta Conv2d output',True),
             nn.ReLU(inplace=True),                                  dscl('\tb ReLU output',True),
             nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True),  dscl('\tc MaxPool2d output',True),
-            Fire(64, 8, 16, 16),                                      dscl('\td Fire output',True),
+            Fire(2*n, n, n, n),   
+            Fire(2*n, n, n, n),                                   dscl('\td Fire output',True),
             nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True),  dscl('\te MaxPool2d output',True),
-            Fire(32, 16, 32, 32),                                      dscl('\tf Fire output',True),
+            Fire(2*n, n, n, n),                                   dscl('\td Fire output',True),
+            Fire(2*n, n, n, n),                                   dscl('\tf Fire output',True),
             nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True),  dscl('\tg MaxPool2d output',True),
-            Fire(64, 32, 64,64),                                      dscl('\th Fire output',True),
+            Fire(2*n, n, n, n),
+            Fire(2*n, n, n, n),                                   dscl('\th Fire output',True),
             nn.MaxPool2d(kernel_size=3, stride=2, ceil_mode=True),  dscl('\ti MaxPool2d output',True),
-            nn.Conv2d(128,1,kernel_size=1),                        dscl('\tj Conv2d output',True),
+            nn.Conv2d(2*n,1,kernel_size=1),                          dscl('\tj Conv2d output',True),
             nn.AvgPool2d(kernel_size=3, stride=2),                  dscl('\tk AvgPool2d output',True),
+            nn.Sigmoid(),
         )
-
         for m in self.modules():
             if isinstance(m, nn.Conv2d):
                 if False:#m is final_conv:
@@ -98,27 +99,46 @@ class SqueezeNet(nn.Module):
 
 
     def forward(self, x):
-        return self.main(x)
+        return self.main1(x)
 
 
-#self.nets[k].apply(f___weights_init)
+
 
 def unit_test():
+
     print(__file__,'unit_test()')
-    test_net = SqueezeNet()
-    for i in range(10):
-        t0=time.time()
-        a = test_net(Variable(torch.randn(304, 1, 128, 128)))
-        print(i,time.time()-t0)
-        #t0=time.time()
-        #a = test_net(Variable(torch.randn(1, 1, 2464, 2064)))
-        #print(i,time.time()-t0)  
-    print('Tested SqueezeNet')
+    device = torch.device('cuda:0' if (torch.cuda.is_available()) else "cpu")
+    
+    CA()
+    ns={}
+    for n in [3,6,8,9,10,11,12,13,14,15,16,32,64]:
+        test_net = SqueezeNet(n).to(device)
+        dts=[]
+        x=Variable(torch.randn(304, 1, 128, 128)).to(device)
+        #x=Variable(torch.randn(1, 1, 2464, 2064)).to(device)
+        for i in range(100):
+            t0=time.time()
+            a = test_net(x)
+            dt=time.time()-t0
+            #if dt>0.004 and dt < 0.02:
+            #    dts.append(1/dt)
+            dts.append(dt)
+            print(i,dt,5*' ',end='\r') 
+        #print('\nTested SqueezeNet.')
+        #hist(dts[1:],bins=1000)
+        m=np.median(dts)
+        ns[n]=m
+        #title(m)
+        #spause()
+        #cm(r=1)
+    plot(list(ns.keys()),1/na(list(ns.values())),'o-')
+    plt.xlabel('n')
+    plt.ylabel('Hz')
 
 
 if __name__=='__main__':
     unit_test()
-
+    cm(r=1)
 
 
 #EOF
