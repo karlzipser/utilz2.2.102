@@ -57,9 +57,12 @@ if __name__=='__main__':
 #EOF
 
 if False:
-    fs=sggo(opjD('JPEM_2023-12-21-08-31-50/npy/*.npy'))
-    for f in fs:
+    fs=sggo('/Volumes/disk/JPEM_2023-12-21-08-31-50/*.npy')
+    mkdirp(opjD('JPEM_2023-12-21-08-31-50/pngs'))
+    for i in range(0,len(fs),10):#f in fs:
+        f=fs[i]
+        print(f)
         p=pname(f).replace('npy','png')
-        mkdirp(p)
         n=np.load(f)
-        rimsave(opj(p,fnamene(f)+'.png'),fx(n))
+        rimsave(opjD('JPEM_2023-12-21-08-31-50/pngs',fnamene(f)+'.png'),fx(n))
+
