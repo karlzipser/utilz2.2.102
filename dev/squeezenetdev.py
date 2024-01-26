@@ -81,7 +81,7 @@ class Fire(nn.Module):
         ], 1)
 
 
-
+"""
 class SqueezeNet_down(nn.Module):
     def __init__(
         _,
@@ -124,12 +124,12 @@ class SqueezeNet_down(nn.Module):
                     m.bias.data.zero_()
     def forward(_, x):
         return _.main1(x)
+"""
 
 
 
 
-
-
+"""
 class SqueezeNet_deconv(nn.Module):
     def __init__(
         _,
@@ -140,26 +140,26 @@ class SqueezeNet_deconv(nn.Module):
         super(SqueezeNet_deconv, _).__init__()
         _.main1 = nn.Sequential(
             nn.Identity(),                                          dscl('SqueezeNet_deconv input',True),
-            nn.ConvTranspose2d(nin, 16*n, kernel_size=3, stride=1, padding=0),   dscl('\ta ConvTranspose2d output',True),
+            nn.ConvTranspose2d(nin, 2*n, kernel_size=3, stride=1, padding=0),   dscl('\ta ConvTranspose2d output',True),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(16*n, 8*n, kernel_size=3, stride=2, padding=0),   dscl('\tmp ConvTranspose2d output',True), 
+            nn.ConvTranspose2d(2*n, 2*n, kernel_size=3, stride=2, padding=0),   dscl('\tmp ConvTranspose2d output',True), 
             nn.ReLU(inplace=True),                                 dscl('\tb ReLU output',True),
-            Fire(8*n,4*n, 4*n, 4*n,False,True),                                         dscl('\td up Fire output',True),
+            Fire(2*n, n, 2*n, 2*n,False,True),                                         dscl('\td up Fire output',True),
             #Fire(2*n, 2*n, 2*n, 2*n),                                   dscl('\td Fire output',True),
-            nn.ConvTranspose2d(8*n, 4*n, kernel_size=3, stride=2, padding=0),   dscl('\tmp ConvTranspose2d output',True),
+            nn.ConvTranspose2d(4*n, 4*n, kernel_size=3, stride=2, padding=0),   dscl('\tmp ConvTranspose2d output',True),
             nn.ReLU(inplace=True),
             #Fire(4*n, 2*n, 2*n, 2*n),                                   dscl('\td Fire output',True),
-            Fire(4*n, 2*n, 2*n, 2*n),                                   dscl('\tf Fire output',True),
-            nn.ConvTranspose2d(4*n, 2*n, kernel_size=3, stride=2, padding=0),   dscl('\tmp ConvTranspose2d output',True),
+            Fire(4*n, 2*n, 4*n, 4*n),                                   dscl('\tf Fire output',True),
+            nn.ConvTranspose2d(8*n, 8*n, kernel_size=3, stride=2, padding=0),   dscl('\tmp ConvTranspose2d output',True),
             nn.ReLU(inplace=True),
             #Fire(8*n, 4*n, 4*n, 4*n),
-            Fire(2*n, n, n, n),                                   dscl('\th Fire output',True),
-            nn.ConvTranspose2d(2*n, n, kernel_size=3, stride=2, padding=1),   dscl('\tmp ConvTranspose2d output',True),
+            Fire(8*n, 4*n, 8*n, 8*n),                                   dscl('\th Fire output',True),
+            nn.ConvTranspose2d(16*n, 16*n, kernel_size=3, stride=2, padding=1),   dscl('\tmp ConvTranspose2d output',True),
             nn.ReLU(inplace=True),
-            nn.ConvTranspose2d(n,nout,kernel_size=4),                          dscl('\tj ConvTranspose2d output',True),
+            nn.ConvTranspose2d(16*n,nout,kernel_size=4),                          dscl('\tj ConvTranspose2d output',True),
 
         )
-        """
+        
         for m in _.modules():
             if isinstance(m, nn.ConvTranspose2d):
                 if False:#m is final_conv:
@@ -168,7 +168,7 @@ class SqueezeNet_deconv(nn.Module):
                     init.kaiming_uniform(m.weight.data)
                 if m.bias is not None:
                     m.bias.data.zero_()
-        """
+        
     def forward(_, x):
         return _.main1(x)
 
@@ -218,6 +218,45 @@ class SqueezeNet_no_mp(nn.Module):
                     m.bias.data.zero_()
     def forward(_, x):
         return _.main1(x)
+
+
+
+class Generator(nn.Module):
+    def __init__(self):
+        super(Generator, self).__init__()
+        self.main = nn.Sequential(  
+                                                                        Describe_Layer('Generator input',True),
+            nn.ConvTranspose2d( nin, 16*n, 4, 1, 0),      Describe_Layer('ConvTranspose2d output',True),
+            nn.ReLU(True),
+
+            Fire(16*n, 4*n, 4*n, 4*n),                                         dscl('\td Fire output',True),
+
+            nn.ConvTranspose2d(ngf * 8*8, ngf * 4*4, 4, 2, 1, bias=False),  Describe_Layer('ConvTranspose2d output',True),
+            nn.BatchNorm2d(ngf * 4*4),
+            nn.ReLU(True),
+
+            nn.ConvTranspose2d( ngf * 4*4, ngf * 4, 4, 2, 1, bias=False), Describe_Layer('ConvTranspose2d output',True),
+            nn.BatchNorm2d(ngf * 4),
+            nn.ReLU(True),
+
+            nn.ConvTranspose2d( ngf * 4, ngf, 4, 2, 1, bias=False),     Describe_Layer('ConvTranspose2d output',True),
+            nn.BatchNorm2d(ngf),
+            nn.ReLU(True),
+
+            nn.ConvTranspose2d( ngf, ngf//2, 4, 2, 1, bias=False),      Describe_Layer('ConvTranspose2d output',True),
+            nn.BatchNorm2d(ngf//2),
+            nn.ReLU(True),
+
+            nn.ConvTranspose2d( ngf//2, nc, 4, 2, 1),       Describe_Layer('ConvTranspose2d output',True,'\n'),
+            #nn.Upsample((image_size,image_size),mode='nearest'),        Describe_Layer('Upsample output',True,'\n'),
+            nn.Tanh()
+        )
+    def forward(self, input):
+        return self.main(input)
+"""
+
+
+
 
 
 
