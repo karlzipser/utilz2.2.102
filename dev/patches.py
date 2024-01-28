@@ -24,3 +24,19 @@ sh(patches_ijs)
 print(shape(image),len(patches_ijs))
 
 # reconstruct image from patches_ijs
+
+
+
+fs=sggo(opjh('Downloads/1-28-2024-SF-Bay-boats/*.*'))
+kprint(fs)
+m=[]
+for f in fs:
+	if ' ' in fname(f):
+		m.append(f)
+mkdirp(opjh('Downloads/1-28-2024-SF-Bay-boats-duplicates'))
+for f in m:
+	os_system('mv',qtd(f),qtd(f.replace('1-28-2024-SF-Bay-boats','1-28-2024-SF-Bay-boats-duplicates')),a=1,e=1)
+
+
+
+#EOF
