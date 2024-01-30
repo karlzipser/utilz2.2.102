@@ -12,7 +12,7 @@ args=dict(
     red= True,
     dofill= False,
     clr= 'red',
-    brush_size= 21,
+    brush_size= 5,
     mult= 3,
     font=1,
     bottomLeftCornerOfText= (30,70),
@@ -213,7 +213,7 @@ def batch(p):
 if __name__=='__main__':
     batch(p)
 
-
+# python3 utilz2/scripts/draw_segmentation-with-line2a.py --imgfolder /Users/karlzipser/Desktop/data/1-28-2024-SF-Bay-boats/JPG-quarters --maskfolder /Users/karlzipser/Desktop/data/1-28-2024-SF-Bay-boats/JPG-quarters-mask --shuffle True
 
 
 

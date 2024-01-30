@@ -141,3 +141,26 @@ for f in masks:
     assert ope(f.replace('mask','png'))
 """
 
+
+
+
+
+def split_and_save_image_into_four_monochrome_images(imgfilepath,dstfolder):
+    mkdirp(dstfolder)
+    g=fx(rimread(imgfilepath))
+    a,b=g[:,:iwidth(g)//2,:],g[:,-iwidth(g)//2:,:]
+    imgs=[]
+    imgs.append(a[:iheight(a)//2,:])
+    imgs.append(a[-iheight(a)//2:,:])
+    imgs.append(b[:iheight(a)//2,:])
+    imgs.append(b[-iheight(a)//2:,:])
+    n=fnamene(imgfilepath)
+    for i in rlen(imgs):
+        rimsave(opj(dstfolder,d2p(n,i,'jpg')),imgs[i])
+
+fs=sggo(opjD('data/1-28-2024-SF-Bay-boats/JPG/*.*'))
+for f in fs:
+    split_and_save_image_into_four_monochrome_images(f,opjD('data/1-28-2024-SF-Bay-boats/JPG-quarters'))
+
+#EOF
+
