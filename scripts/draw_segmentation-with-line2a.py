@@ -74,6 +74,8 @@ def mouse_callback(event,x,y,flags,p):
         c = (0,255,0)
     elif p.clr == 'blue':
         c = (255,0,0)
+    elif p.clr == 'black':
+        c = (0,0,0)
     if event == cv2.EVENT_LBUTTONDOWN:
         p.ix,p.iy = x,y
         print(x,y)
@@ -121,14 +123,13 @@ def annotate(p):
             p.last_x = None
             p.drawing = not p.drawing
         elif k == ord('r'):
-            clr = 'red'
+            p.clr = 'red'
         elif k == ord('g'):
-            if not p.first_key:
-                p.first_key = True
-                os_system('say green')
             p.clr = 'green'
         elif k == ord('b'):
             p.clr = 'blue'
+        elif k == ord('k'):
+            p.clr = 'black'
         elif k == ord('t'):
             p.img[p.img<255] = 0
         elif k == ord('f'):
