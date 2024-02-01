@@ -75,7 +75,7 @@ def imagemenu(d):
                 a[:,:u,:]=(0,255,0)
                 a[-u:,:,:]=(0,255,0)
                 a[:u,:,:]=(0,255,0)
-        shc(displaydic,titles_font_scale=1,e=0,figsize=15)
+        shc(displaydic,titles_font_scale=1,e=0,figsize=5,padsize=2)
         spause()
 
         c=getch()
@@ -133,7 +133,7 @@ if __name__ == '__main__':
         kprint(selected,title='selected')
         kprint(notselected,title='notselected')
     if True:
-        p=opjh('Pictures/picture_data/pictures/people/myhan/sx')
+        p=opjD('data/1-28-2024-SF-Bay-boats/JPG-quarters')
         _d=load_img_folder_to_dict(
             p,
             maxnumfiles=8*8,
@@ -148,11 +148,11 @@ if __name__ == '__main__':
         #    ctr+=1
         #n=len(_d)
         #m=zeros((n,n))
-        #results=[]
+        results=[]
         for i in range(10):
             ks=kys(_d)
             np.random.shuffle(ks)
-            ks=ks[:64]
+            ks=ks[:6*6]
             side=np.ceil(sqrt(len(ks)))
             windowsize=int(0.8*min(SCREEN_RESOLUTION))
             maxwidth=intr(windowsize/side)
@@ -172,22 +172,23 @@ if __name__ == '__main__':
             results.append((selected,notselected))
         kprint(results)
 
-kys2i={}
-ctr=0
-for k in kys(_d):
-    kys2i[k]=ctr
-    ctr+=1
-n=len(_d)
-m=zeros((n,n))
-for r in results:
-    selected,notselected=r
-    for s in selected:
-        for ns in notselected:
-            m[kys2i[s],kys2i[ns]]-=1
-        for s2 in selected:
-            if s2!=s:
-                m[kys2i[s],kys2i[s2]]+=1
-sh(m,2)
+if False:
+    kys2i={}
+    ctr=0
+    for k in kys(_d):
+        kys2i[k]=ctr
+        ctr+=1
+    n=len(_d)
+    m=zeros((n,n))
+    for r in results:
+        selected,notselected=r
+        for s in selected:
+            for ns in notselected:
+                m[kys2i[s],kys2i[ns]]-=1
+            for s2 in selected:
+                if s2!=s:
+                    m[kys2i[s],kys2i[s2]]+=1
+    sh(m,2)
 
 
 
