@@ -78,15 +78,32 @@ mx=0
 for k in imgs:
     png=rimread(opjD('data/JPEM_2023-12-21-08-31-50/train/png',k+'.png'))
     clf()
-    sh(png)
-    plt_square()
+    #sh(png)
+
+    a=1.*png
+    md=np.median(a.flatten())
+    a-=md
+    #plt_square()
+    r1=0
+    r2=0
     for xy in imgs[k]:
         x,y=xy
-        plot(y,x,'k.')
-    spause()
+    #    plot(y,x,'k.')
+        t=imgs[k][xy]
+        if t>0.6:
+            t=1
+        else:
+            t=0
+        r1+=1
+        r2+=t
+        a[x+64:x+256-64,y+64:y+256-64,:]*=t
+    #spause()
+    a+=md
+    png=a.astype(u8)
+    sh(png[64:2240,64:2240,1],1,title=pct(r2,r1))
     a=len(imgs[k].values())
     mx=max(a,mx)
-    cm(k,a,r=1)
+    cm(k,a,pct(r2,r1),r=1)
 print('max=',mx)
 
 
@@ -140,27 +157,4 @@ for f in masks:
     print(f)
     assert ope(f.replace('mask','png'))
 """
-
-
-
-
-
-def split_and_save_image_into_four_monochrome_images(imgfilepath,dstfolder):
-    mkdirp(dstfolder)
-    g=fx(rimread(imgfilepath))
-    a,b=g[:,:iwidth(g)//2,:],g[:,-iwidth(g)//2:,:]
-    imgs=[]
-    imgs.append(a[:iheight(a)//2,:])
-    imgs.append(a[-iheight(a)//2:,:])
-    imgs.append(b[:iheight(a)//2,:])
-    imgs.append(b[-iheight(a)//2:,:])
-    n=fnamene(imgfilepath)
-    for i in rlen(imgs):
-        rimsave(opj(dstfolder,d2p(n,i,'jpg')),imgs[i])
-
-fs=sggo(opjD('data/1-28-2024-SF-Bay-boats/JPG/*.*'))
-for f in fs:
-    split_and_save_image_into_four_monochrome_images(f,opjD('data/1-28-2024-SF-Bay-boats/JPG-quarters'))
-
-#EOF
 

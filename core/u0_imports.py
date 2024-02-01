@@ -23,7 +23,7 @@ def interactive():
     return not hasattr(main, '__file__')
 
 
-from collections import OrderedDict
+
 
 
 imports = (
@@ -55,11 +55,13 @@ imports = (
     #'importlib',
     #('FROM','pprint','pprint'),
     #('FROM','termcolor','cprint'),
-    #('FROM','collections','namedtuple'),
+    ('FROM','collections','OrderedDict'),
     ('AS','numpy','np'),
     'fire',
     ('FROM','copy','deepcopy'),
+    ('FROM','importlib','reload'),
 )
+# imports are commented out so that they are called when needed, to increase core load speed
 
 for im in imports:
     if type(im) == str:
