@@ -7,9 +7,22 @@ def zeroToOneRange(m):
 z2o = zeroToOneRange
 
 
-def z55(m):
-    return (255*z2o(na(m))).astype(np.uint8)
+#def z55(m):
+#    return (255*z2o(na(m))).astype(np.uint8)
 
+def z55(m):
+    if np.isnan(m[0,0,0]):
+        assert False
+    a=255*z2o(na(m))
+    if np.isnan(a[0,0,0]):
+        w=shape(m)[0]
+        h=shape(m)[1]
+        b=zeros((w,h,3),np.uint8)
+        print('\nWarning! z55() nan found, setting image to zeros\n')
+        input()
+    else:
+        b=a.astype(np.uint8)
+    return b
 
 def z2_255_by_channel(m):
     for i in range(3):

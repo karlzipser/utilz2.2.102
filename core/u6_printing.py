@@ -161,6 +161,17 @@ def trun(s):
 
 
 
+def rollout(s='',n=5,t=0.1):
+    print(n*'\n')
+    l=s.split('\n')
+    for a in l:
+        print(a)
+        time.sleep(t)
+    print()
+
+
+    
+
 if __name__ == '__main__':
     eg(__file__)
     t = 0.05

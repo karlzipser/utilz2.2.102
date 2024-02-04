@@ -22,6 +22,7 @@ def typename(o):
 
 def boxed(text,title=''):
     # https://stackoverflow.com/questions/20756516/python-create-a-text-border-with-dynamic-size
+    title=' '+title+' '
     text = str(text)
     lines = text.splitlines()
     width = max(max(len(s) for s in lines),len(title)+1)

@@ -902,8 +902,11 @@ def resize_so_mx_size_goes_to_ref_size(g,mx,r):
 def get_bounding_rect_from_object_mask(object_mask):
     cnts = cv2.findContours(1*object_mask, cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
     cnts = cnts[0] if len(cnts) == 2 else cnts[1]
-    assert len(cnts) == 1
-    xx,yy,width,height = cv2.boundingRect(cnts[0])
+    if len(cnts)!=1:
+        #cE('Warning, get_bounding_rect_from_object_mask:len(cnts)!=1',time_str())
+        xx,yy,width,height=0,0,0,0
+    else:
+        xx,yy,width,height = cv2.boundingRect(cnts[0])
     return xx,yy,width,height
 
 
