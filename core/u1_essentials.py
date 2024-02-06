@@ -312,7 +312,8 @@ def eg(f,cs=False):
 
 
 
-
+def hasnans(x):
+    return np.isnan(np.sum(x))
 
 if True:
     def kws2dict(*args,**kwargs):
