@@ -44,3 +44,5 @@ pip3 install color_transfer
 ## for .bashrc
 # source ~/utilz2/scripts/bashrc.sh
 # source ~/pytorch_env/pytorch_env/bin/activate
+
+# https://www.sublimetext.com/docs/linux_repositories.html
