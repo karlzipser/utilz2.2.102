@@ -138,10 +138,14 @@ vectorize
 input tensor
 target tensor
 [
-    {x=,y=,vals=},
-    {x=,y=,vals=},
-    {x=,y=,vals=},
+    {x=,y=,dx=,dy=,vals=},
+    {x=,y=,dx=,dy=,vals=},
+    {x=,y=,dx=,dy=,vals=},
 ]
+
+and also,
+
+reverse to go from vectorized to dictionary representation
 """
 
 if __name__ == '__main__':
