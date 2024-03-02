@@ -133,7 +133,16 @@ def get_noisy_version_of_simple_object(obj,noisy_parameter):
     return n
 
 
-
+"""
+vectorize
+input tensor
+target tensor
+[
+    {x=,y=,vals=},
+    {x=,y=,vals=},
+    {x=,y=,vals=},
+]
+"""
 
 if __name__ == '__main__':
 
