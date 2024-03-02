@@ -68,22 +68,35 @@ def generate_random_simple_boat(imgwidth):
 
 def vectorize_boat(b):
     h=b['hull']
+    #kprint(h,r=1)
     w=b['wake']
-    v=[0,0]
-    ks=straskys('xcenter ycenter width height')
+    vb={}
+    v=[]
+    ks=straskys('xanchor yanchor width height')
     for k in ks:
         u=0
         if k in h:
             u=h[k]
         print('h',u)
         v.append(u)
+    if 'xcenter' in h and 'ycenter' in h:
+        x,y=h['xcenter'],h['ycenter']
+    else:
+        x,y=0,0
+    vb['hull']=dict(xy=(x,y),v=v)
+    v=[]
     for k in ks:
         u=0
         if k in w:
             u=w[k]
         print('w',u)
         v.append(u)
-    return v
+    if 'xcenter' in h and 'ycenter' in w:
+        x,y=w['xcenter'],w['ycenter']
+    else:
+        x,y=0,0
+    vb['wake']=dict(xy=(x,y),v=v)
+    return vb
 
 
 def devectorize_boat(v):
@@ -241,12 +254,15 @@ A=zeros((imgwidth,imgwidth,nsteps*6))
 for b in boats_through_time:
     k='noisy'
     for i in rlen(b[k]):
-        v=vectorize_boat(b[k][i])
-        #cm(i,v,r=1)
-        x,y=int(v[2]),int(v[3])
-        x=bound_value(x,0,imgwidth-1)
-        y=bound_value(y,0,imgwidth-1)
-        A[x,y,i*6:(i+1)*6]=v[4:]
+        vb=vectorize_boat(b[k][i])
+        for l in vb:
+            x,y=vb[l]['xy']
+            v=vb[l]['v']
+            x=bound_value(x,0,imgwidth-1)
+            y=bound_value(y,0,imgwidth-1)
+            x,y=int(x),int(y)
+            print(x,y,i)
+            A[x,y,i*len(v):(i+1)*len(v)]=v
 
 A[0,0,:]=0
 a=A.sum(axis=2)
