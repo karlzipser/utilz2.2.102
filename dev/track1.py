@@ -66,6 +66,48 @@ def generate_random_simple_boat(imgwidth):
 
 
 
+def vectorize_boat(b):
+    h=b['hull']
+    w=b['wake']
+    v=[0,0]
+    ks=straskys('xcenter ycenter width height')
+    for k in ks:
+        u=0
+        if k in h:
+            u=h[k]
+        print('h',u)
+        v.append(u)
+    for k in ks:
+        u=0
+        if k in w:
+            u=w[k]
+        print('w',u)
+        v.append(u)
+    return v
+
+
+def devectorize_boat(v):
+    b=dict(
+        hull=dict(
+            xcenter=v[2],
+            ycenter=v[3],
+            width=v[4],
+            height=v[5],
+        ),
+        wake=dict(
+            xcenter=v[6],
+            ycenter=v[7],
+            width=v[8],
+            height=v[9],
+        )
+    )
+    return b
+
+
+
+
+
+
 def move_boat(b):
     h=b['hull']
     nb=generate_simple_boat(
@@ -138,7 +180,7 @@ vectorize
 input tensor
 target tensor
 [
-    {x=,y=,dx=,dy=,vals=},
+    {x=,y=,vals=[a_dx,a_dy,,,,]},
     {x=,y=,dx=,dy=,vals=},
     {x=,y=,dx=,dy=,vals=},
 ]
@@ -154,7 +196,7 @@ if __name__ == '__main__':
         figure(1)
         clf()
         imgwidth=256
-        nboats=randint(1,5)
+        nboats=5#randint(1,5)
         nsteps=50 #randint(5,30)
         boats_through_time=[]
 
@@ -194,6 +236,21 @@ if __name__ == '__main__':
             time.sleep(1/60)
 
 
+A=zeros((imgwidth,imgwidth,nsteps*6))
 
+for b in boats_through_time:
+    k='noisy'
+    for i in rlen(b[k]):
+        v=vectorize_boat(b[k][i])
+        #cm(i,v,r=1)
+        x,y=int(v[2]),int(v[3])
+        x=bound_value(x,0,imgwidth-1)
+        y=bound_value(y,0,imgwidth-1)
+        A[x,y,i*6:(i+1)*6]=v[4:]
+
+A[0,0,:]=0
+a=A.sum(axis=2)
+a[a>0]=1
+sh(np.rot90(a),2)
 
 #EOF
