@@ -54,8 +54,8 @@ def generate_simple_boat(
 
 
 def generate_random_simple_boat(imgwidth):
-    xcenter=randint(imgwidth)
-    ycenter=randint(imgwidth)
+    xcenter=randint(1*scale_factor,imgwidth-1*scale_factor)
+    ycenter=randint(1*scale_factor,imgwidth-1*scale_factor)
     width=randint(10,30)
     height=randint(int(width/4),int(width/2))
     direction=np.random.choice([-1,1],1,p=[0.5,0.5])[0]
@@ -175,7 +175,7 @@ def get_noisy_version_of_simple_object(obj,noise_parameter):
     q=noise_parameter
     print('q=',q)
     n=deepcopy(obj)
-    if q and rnd()<obj['dropout_prob']:#[n['category']]:
+    if False:#q and rnd()<obj['dropout_prob']:#[n['category']]:
         return {}
     ks=['xcenter','ycenter','width','height']
     for k in ks:
@@ -224,16 +224,17 @@ if __name__ == '__main__':
                     noisy=get_noisy_version_of_compound_object(boat['gt'][0],noise_parameter)
                     boat['noisy'].insert(0,noisy)
 
-        figure(101)
-        clf()
-        spause();
-        xylim(-1,imgwidth+1,-1,imgwidth+1)
-        plt_square()
-        for j in range(nboats):
-            boat=boats_through_time[j]
-            for i in range(nsteps):
-                plot_compound_object(boat['gt'][i],'-')
-        spause()
+        for k in ['gt','noisy']:
+            figure('a_'+k)
+            clf()
+            spause();
+            xylim(-1,imgwidth+1,-1,imgwidth+1)
+            plt_square()
+            for j in range(nboats):
+                boat=boats_through_time[j]
+                for i in range(nsteps):
+                    plot_compound_object(boat[k][i],'-')
+            spause()
 
 
 
@@ -255,7 +256,7 @@ def get_ps(img):
 
 final_imgs={}
 final_sums={}
-for k in ['gt']:#,'noisy']:
+for k in ['gt','noisy']:
     imgs=[]
     for t in range(nsteps):
         img=zeros((imgwidth//scale_factor,imgwidth//scale_factor,8))
@@ -279,7 +280,8 @@ for k in ['gt']:#,'noisy']:
     sh(np.rot90(finalsum),k)
     final_imgs[k]=final_img
     final_sums[k]=finalsum
-
+del final_img
+del finalsum
 #ps=get_ps(final_img)
 #pv=list(ps.values())
 
@@ -291,46 +293,46 @@ for p in pv:
     cm(r=1)
 """
 
-
-objects={}
-indices = np.nonzero(finalsum)
-for i in rlen(indices[0]):
-    xa,ya=indices[0][i],indices[1][i]
-    for t in range(nsteps):
-        if t not in objects:
-            objects[t]=dict(
-                boats=[],
-                wakes=[],
-            )
-        a=t*8
-        b=t*8+4
-        c=t*8+4
-        d=t*8+8
-        p=final_img[xa,ya]
-        for category,q in zip(['boats','wakes'],[p[a:b],p[c:d]]):
-            #cm(t,category,q,r=0)
-            dx=q[0]
-            dy=q[1]
-            width=q[2]
-            height=q[3]
-            if width*height:
-                objects[t][category].append(
-                    dict(
-                        xcenter=xa*scale_factor-dx,
-                        ycenter=ya*scale_factor-dy,
-                        width=width,
-                        height=height,
-                    )
+for k in ['gt','noisy']:
+    objects={}
+    indices = np.nonzero(final_sums[k])
+    for i in rlen(indices[0]):
+        xa,ya=indices[0][i],indices[1][i]
+        for t in range(nsteps):
+            if t not in objects:
+                objects[t]=dict(
+                    boats=[],
+                    wakes=[],
                 )
-kprint(objects)
+            a=t*8
+            b=t*8+4
+            c=t*8+4
+            d=t*8+8
+            p=final_imgs[k][xa,ya]
+            for category,q in zip(['boats','wakes'],[p[a:b],p[c:d]]):
+                #cm(t,category,q,r=0)
+                dx=q[0]
+                dy=q[1]
+                width=q[2]
+                height=q[3]
+                if width*height:
+                    objects[t][category].append(
+                        dict(
+                            xcenter=xa*scale_factor-dx,
+                            ycenter=ya*scale_factor-dy,
+                            width=width,
+                            height=height,
+                        )
+                    )
+    kprint(objects)
 
-figure(101)
-for i in range(nsteps):
-    for j in range(nboats):
-        o=objects[i]['boats'][j]
-        plot_bounding_box(o,'k',':')
-        o=objects[i]['wakes'][j]
-        plot_bounding_box(o,'y',':')
+    figure('a_'+k)
+    for i in range(nsteps):
+        for j in range(nboats):
+            o=objects[i]['boats'][j]
+            plot_bounding_box(o,'k',':')
+            o=objects[i]['wakes'][j]
+            plot_bounding_box(o,'y',':')
 
 """
 boats_through_time[
