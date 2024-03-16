@@ -16,3 +16,14 @@ for f in fs:
 		os_system('ffmpeg -i',f,'-r 1',opj(opjD(fname(pname(f)),fnamene(f)),'%04d.png'),e=1,a=1)
 
 
+fs=['/Users/karlzipser/Desktop/clip_3_slow.mp4']
+for f in fs:
+	dstdir=opjD(fname(pname(f)),fnamene(f))
+	if not ope(dstdir):
+		mkdirp(opjD(fname(pname(f)),fnamene(f)))
+		os_system('ffmpeg -i',f,'-r 30',opj(opjD(fname(pname(f)),fnamene(f)),'%04d.png'),e=1,a=1)
+
+# to gif
+convert *.png screens.gif
+
+convert screens.gif -resize 640x360 screens640x360.gif
