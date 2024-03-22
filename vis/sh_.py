@@ -193,6 +193,7 @@ def draw_text(
     return text_size
 
 
+from utilz2.torch_.init import *
 
 def sh(
     inpt,
@@ -292,7 +293,7 @@ def sh(
         )
 
 
-    if type(inpt) == dict:
+    elif type(inpt) == dict:
         l = []
         for k in inpt:
             u = shape(inpt[k])[0]
@@ -380,7 +381,9 @@ def sh(
                 display_key_replacements=display_key_replacements,
             )
             #sh( fix_up_image_list( vis_square2( inpt ) ) , padsize=4, padval=0.5 ) ) )
-    
+    elif type(inpt)==torch.Tensor:
+        inpt=cuda_to_rgb_image(inpt)
+        
     if np.array(crop).max()>0:
         x0,x1,y0,y1=crop
         print(x0,y0,x1,y1)
