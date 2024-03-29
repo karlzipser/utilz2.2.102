@@ -10,7 +10,7 @@ z2o = zeroToOneRange
 #def z55(m):
 #    return (255*z2o(na(m))).astype(np.uint8)
 
-def z55(m):
+def z55(m,warn_if_nan=True):
     if np.isnan(m[0,0,0]):
         assert False
     a=255*z2o(na(m))
@@ -18,8 +18,9 @@ def z55(m):
         w=shape(m)[0]
         h=shape(m)[1]
         b=zeros((w,h,3),np.uint8)
-        print('\nWarning! z55() nan found, setting image to zeros\n')
-        input()
+        if warn_if_nan:
+            print('\nWarning! z55() nan found, setting image to zeros\n')
+            #input()
     else:
         b=a.astype(np.uint8)
     return b

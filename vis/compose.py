@@ -169,9 +169,9 @@ def place_img_f_in_img_g(x0,y0,f,g,bottom=False,f_center=False,center_in_g=False
 
 
 
-def insure_rgb(img):
+def insure_rgb(img,warn_if_nan=True):
     if img.dtype != np.uint8:
-        img = z55(img)
+        img = z55(img,warn_if_nan=warn_if_nan)
     if len(shape(img)) < 3 or shape(img)[2] != 3:
         img2 = zeros((shape(img)[0],shape(img)[1],3),np.uint8)
         for i in [0,1,2]:
@@ -200,6 +200,7 @@ def get_image_row(
     top_blank=True,
     bottom_blank=True,
     use_z2o=False,
+    warn_if_nan=True,
 ):
     if not max_extent:
         for img in img_lst:
@@ -217,7 +218,7 @@ def get_image_row(
         img_lst2.append(blank_space)
     for i in range(len_img_lst):
         img = img_lst[i]
-        img = insure_rgb(img)
+        img = insure_rgb(img,warn_if_nan=warn_if_nan)
         img = cv2.resize(
             img,
             (int(max_extent*(shape(img)[1]/shape(img)[0])),max_extent),

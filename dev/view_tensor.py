@@ -3,7 +3,7 @@ from utilz2.torch_.init import *
 
 
 
-def get_image_of_tensor(a,mapping,max_num_batches_to_show=0):
+def get_image_of_tensor(a,mapping,max_num_batches_to_show=0,warn_if_nan=True):
 
 	if not max_num_batches_to_show:
 		max_num_batches_to_show=a.size()[0]
@@ -27,12 +27,12 @@ def get_image_of_tensor(a,mapping,max_num_batches_to_show=0):
 		for batch_n in range(min(max_num_batches_to_show,c.size()[0])):
 			d[batch_n]=c[batch_n,:].detach().cpu().numpy().transpose(1,2,0)
 		ds[channel_n]=d
-	kprint(ds)
+	#kprint(ds)
 
 	rows=[]
 	top=True
 	for k in ds:
-		rows.append(get_image_row(list(ds[k].values()),blank_width=1,top_blank=top))
+		rows.append(get_image_row(list(ds[k].values()),blank_width=1,top_blank=top,warn_if_nan=warn_if_nan))
 		top=False
 	g=get_image_column(rows)
 	return g
