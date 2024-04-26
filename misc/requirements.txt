@@ -7,7 +7,6 @@ torchaudio
 torchvision
 termcolor
 h5py
-fire
 os
 string
 glob
