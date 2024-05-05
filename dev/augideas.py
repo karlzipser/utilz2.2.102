@@ -7,7 +7,7 @@ q=1/1
 
 def augimg(img):
     #print(shape(img),img.min(),img.max())
-    q=np.random.random()
+    q=np.random.random()/4+0.75
     if len(imgdic)>2:
         mask=an_element(imgdic)
         if randint(2)<1: mask=cv2.flip(mask,flipCode=0)
