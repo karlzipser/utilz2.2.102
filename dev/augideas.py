@@ -20,7 +20,7 @@ def augimg(img):
         new_img=1*img
         new_img+=mask*dimgs[0]
         new_img+=(1-mask)*dimgs[1]
-        sh(mask,2)
+        #sh(mask,2)
     else:
         new_img=img
 
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         img=rimread(f)
         img=cv2.resize(img,(300,200))
         img=(img/255.).astype(np.float32)
-        img=augimg(img,imgdic)
+        img=augimg(img)
         sh(img,r=1)
 
 #EOF
