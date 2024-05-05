@@ -2,7 +2,7 @@
 from utilz2 import *
 
 
-def augimg(img,imdgic):
+def augimg(img,imgdic):
     if len(imgdic)>2:
         mask=an_element(imgdic)
         m=mask[:,:,0]
