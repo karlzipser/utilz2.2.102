@@ -1,17 +1,8 @@
 
-imgdic={}
-max_dic_len=3
-q=1/3
+from utilz2 import *
 
 
-fs=sggo(opjh('Desktop/*.png'))
-for f in fs:
-    img=rimread(f)
-    img=cv2.resize(img,(300,200))
-    img=(img/255.).astype(np.float32)
-
-
-
+def augimg(img,imdgic):
     if len(imgdic)>2:
         mask=an_element(imgdic)
         m=mask[:,:,0]
@@ -29,10 +20,31 @@ for f in fs:
         sh(mask,2)
     else:
         new_img=img
+
     if len(imgdic)>=max_dic_len:
         del(imgdic[akey(imgdic)])
+    
     imgdic[time.time()]=img
 
+    return new_img
 
     
-    sh(new_img,r=1)
+
+
+
+if __name__ == '__main__':
+
+    imgdic={}
+    max_dic_len=3
+    q=1/3
+
+    fs=sggo(opjh('Desktop/*.png'))
+
+    for f in fs:
+        img=rimread(f)
+        img=cv2.resize(img,(300,200))
+        img=(img/255.).astype(np.float32)
+        img=augimg(img,imgdic)
+        sh(img,r=1)
+
+#EOF
