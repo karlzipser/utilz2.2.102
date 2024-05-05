@@ -5,7 +5,7 @@ max_dic_len=1000
 imgdic={}
 q=1/3
 
-def augimg(img,imgdic):
+def augimg(img):
     if len(imgdic)>2:
         mask=an_element(imgdic)
         m=mask[:,:,0]
