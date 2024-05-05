@@ -3,9 +3,10 @@ from utilz2 import *
 
 max_dic_len=500
 imgdic={}
-q=1/3
+q=1/1
 
 def augimg(img):
+    print(shape(img),img.min(),img.max())
     if len(imgdic)>2:
         mask=an_element(imgdic)
         m=mask[:,:,0]
@@ -24,7 +25,7 @@ def augimg(img):
     else:
         new_img=img
 
-    print(len(imgdic))
+    #print(len(imgdic))
     if len(imgdic)>=max_dic_len:
         del(imgdic[akey(imgdic)])
     
