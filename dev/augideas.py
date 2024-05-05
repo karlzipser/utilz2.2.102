@@ -1,7 +1,7 @@
 
 from utilz2 import *
 
-max_dic_len=1000
+max_dic_len=500
 imgdic={}
 q=1/3
 
@@ -9,7 +9,7 @@ def augimg(img):
     if len(imgdic)>2:
         mask=an_element(imgdic)
         m=mask[:,:,0]
-        m[m>0.5]=255.
+        m[m>0.5]=1.
         m[m<1]=0.
         for i in range(3):
             mask[:,:,i]=m
