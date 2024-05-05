@@ -24,6 +24,7 @@ def augimg(img):
     else:
         new_img=img
 
+    print(len(imgdic))
     if len(imgdic)>=max_dic_len:
         del(imgdic[akey(imgdic)])
     
