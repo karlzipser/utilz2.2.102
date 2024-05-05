@@ -3,7 +3,7 @@ from utilz2 import *
 
 max_dic_len=1000
 imgdic={}
-q=1/3
+q=1/100
 
 def augimg(img):
     if len(imgdic)>2:
