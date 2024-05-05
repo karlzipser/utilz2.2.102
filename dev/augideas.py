@@ -3,7 +3,7 @@ from utilz2 import *
 
 max_dic_len=1000
 imgdic={}
-q=1/100
+q=1
 
 def augimg(img):
     if len(imgdic)>2:
@@ -15,9 +15,9 @@ def augimg(img):
             mask[:,:,i]=m
         dimgs=[]
         for i in range(2):
-            a=bound_value(q*rndn(),-0.5,0.5)
+            a=bound_value(q*rndn(),-1,1)
             dimgs.append(a*an_element(imgdic))
-        new_img=1*img
+        new_img=0*img
         new_img+=mask*dimgs[0]
         new_img+=(1-mask)*dimgs[1]
         #sh(mask,2)
