@@ -1,7 +1,7 @@
 
 from utilz2 import *
 
-
+max_dic_len=1000
 def augimg(img,imgdic):
     if len(imgdic)>2:
         mask=an_element(imgdic)
