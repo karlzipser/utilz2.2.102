@@ -6,9 +6,12 @@ imgdic={}
 q=1/1
 
 def augimg(img):
-    print(shape(img),img.min(),img.max())
+    #print(shape(img),img.min(),img.max())
+    q=np.random.random()
     if len(imgdic)>2:
         mask=an_element(imgdic)
+        if randint(2)<1: mask=cv2.flip(mask,flipCode=0)
+        if randint(2)<1: mask=cv2.flip(mask,flipCode=1)
         m=mask[:,:,0]
         m[m>0.5]=1.
         m[m<1]=0.
@@ -17,7 +20,10 @@ def augimg(img):
         dimgs=[]
         for i in range(2):
             a=bound_value(q*rndn(),-1,1)
-            dimgs.append(a*an_element(imgdic))
+            g=an_element(imgdic)
+            if randint(2)<1: g=cv2.flip(g,flipCode=0)
+            if randint(2)<1: g=cv2.flip(g,flipCode=1)
+            dimgs.append(a*g)
         new_img=1*img
         new_img+=mask*dimgs[0]
         new_img+=(1-mask)*dimgs[1]
