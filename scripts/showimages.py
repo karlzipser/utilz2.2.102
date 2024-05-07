@@ -3,6 +3,8 @@
 from utilz2 import *
 from pathlib import Path
 
+sys.setrecursionlimit(999*10)
+
 def getparser( **argdic ):
     if interactive():
         return kws2class(**argdic)
