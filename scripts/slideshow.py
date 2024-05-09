@@ -7,10 +7,10 @@ if __name__ == '__main__':
     print('\n\n\n\n\n',__file__)
 
     args=getparser(
-        path=opjD(),
+        path=os.getcwd(),
         file_types='jpg,jpeg,JPG,JPEG,png,PNG',
         extent=256,
-        shuffle=False,
+        shuffle=True,
     )
 
     gd=args.__dict__
@@ -21,6 +21,9 @@ if __name__ == '__main__':
     for f in gd['file_types']:
         #img_paths += sggo(p,'*.'+f)
         img_paths += find_files(start=gd['path'],patterns=['*.'+f],recursive=False,noisy=True)
+
+    if gd['shuffle']:
+        np.random.shuffle(img_paths)
 
     kprint(gd, title='command_line_args')
 
