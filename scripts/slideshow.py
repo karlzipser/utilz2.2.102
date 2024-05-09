@@ -15,9 +15,15 @@ if __name__ == '__main__':
         loop=True,
         x=5,
         y=5,
+        most_recent=False,
     )
 
     gd=args.__dict__
+
+    if gd['most_recent']:
+        gd['path']=most_recent_file_in_folder(gd['path'])
+        assert(os.path.isdir(gd['path']))
+
 
     gd['file_types'] = gd['file_types'].split(',')
 
