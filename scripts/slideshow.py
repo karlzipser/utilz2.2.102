@@ -11,6 +11,8 @@ if __name__ == '__main__':
         file_types='jpg,jpeg,JPG,JPEG,png,PNG',
         extent=256,
         shuffle=True,
+        delay=1,
+        loop=True,
     )
 
     gd=args.__dict__
@@ -33,9 +35,12 @@ if __name__ == '__main__':
 
     img_dic={}
 
-    for f in img_paths:
-        img_dic[f]=rimread(f)
-        sh(img_dic[f],title=fname(f),e=0)
-        time.sleep(1)
+    while True:
+        for f in img_paths:
+            img_dic[f]=rimread(f)
+            sh(img_dic[f],title=fname(f),e=0)
+            time.sleep(gd['delay'])
+        if not gd['loop']:
+            break
 
 #EOF
