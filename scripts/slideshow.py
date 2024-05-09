@@ -15,13 +15,13 @@ if __name__ == '__main__':
         loop=True,
         x=5,
         y=5,
-        most_recent=False,
+        most_recent='',
     )
 
     gd=args.__dict__
 
     if gd['most_recent']:
-        gd['path']=most_recent_file_in_folder(gd['path'])
+        gd['path']=most_recent_file_in_folder(gd['path'],[gd['most_recent']])
         assert(os.path.isdir(gd['path']))
 
 
