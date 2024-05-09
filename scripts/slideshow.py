@@ -13,6 +13,8 @@ if __name__ == '__main__':
         shuffle=True,
         delay=1,
         loop=True,
+        x=5,
+        y=5,
     )
 
     gd=args.__dict__
@@ -34,7 +36,7 @@ if __name__ == '__main__':
     print('\n\nSlideshow with',len(img_paths),'images . . .')
 
     img_dic={}
-
+    figure(1,figsize=(gd['x'],gd['y']))
     while True:
         for f in img_paths:
             img_dic[f]=rimread(f)
