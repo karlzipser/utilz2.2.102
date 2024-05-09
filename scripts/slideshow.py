@@ -33,7 +33,7 @@ if __name__ == '__main__':
 
     for f in img_paths:
         img_dic[f]=rimread(f)
-        sh(img_dic[f])
+        sh(img_dic[f],title=fname(f))
         time.sleep(1)
 
 #EOF
