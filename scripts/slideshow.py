@@ -25,9 +25,11 @@ if __name__ == '__main__':
     if gd['shuffle']:
         np.random.shuffle(img_paths)
 
-    kprint(gd, title='command_line_args')
+    #kprint(gd, title='command_line_args')
 
-    kprint(img_paths)
+    #kprint(img_paths)
+
+    print('\n\nSlideshow with',len(img_paths),'images . . .')
 
     img_dic={}
 
