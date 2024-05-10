@@ -370,6 +370,17 @@ if True:
         return b
 
 
+
+
+def packdict(_,locals_):
+    _._initial_keys=kys(_.__dict__)
+    for k in locals_:
+        if k[0]!='_':
+            _.__dict__[k]=locals_[k]
+
+
+
+
 if __name__ == '__main__':
     eg(__file__)
     print("int(1.9) =",int(1.9))
