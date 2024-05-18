@@ -120,6 +120,10 @@ def savefigs():
     for i in rlen(fns):
         n=fns[i]
         figure(n)
-        plt.savefig(opj(path,d2p(flabels[i],time_str(mode='FileSafe'),'pdf')))
+        if flabels[i]:
+            s=flabels[i]
+        else:
+            s=str(i)
+        plt.savefig(opj(path,d2p(s,time_str(mode='FileSafe'),'pdf')))
 
 #EOF
