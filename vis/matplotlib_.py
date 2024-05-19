@@ -351,6 +351,30 @@ def Plot(xy_pix_sizes,origin,xy_mults):
 #
 ###############
 
+def smooth(d,s=0.9,n=5):
+    d=na(d)
+    e=[]
+    e.append(d[:n].mean())
+    for i in range(1,len(d)):
+        e.append(s*e[i-1]+(1-s)*d[i])
+    return na(e)
+
+def savefigs():
+    path=opjD('figs')
+    mkdirp(path)
+    fns=plt.get_fignums()
+    flabels=plt.get_figlabels()
+    for i in rlen(fns):
+        n=fns[i]
+        figure(n)
+        if flabels[i]:
+            s=flabels[i]
+        else:
+            s=str(i)
+        plt.savefig(opj(path,d2p(s,time_str(mode='FileSafe'),'pdf')))
+
+
+
 if __name__ == '__main__':
     
     eg(__file__)

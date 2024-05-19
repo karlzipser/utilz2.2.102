@@ -74,7 +74,7 @@ def smooth(d):
 """
 #236
 G={}
-
+"""
 def smooth(d,s=0.9,n=5):
     d=na(d)
     e=[]
@@ -82,7 +82,7 @@ def smooth(d,s=0.9,n=5):
     for i in range(1,len(d)):
         e.append(s*e[i-1]+(1-s)*d[i])
     return na(e)
-
+"""
 #k='f1_road'
 #k=select_from_list(categories)
 for k in categories:
@@ -112,18 +112,6 @@ for k in categories:
     plt.legend(loc='lower right')
     plt.title(k)
 
-def savefigs():
-    path=opjD('figs')
-    mkdirp(path)
-    fns=plt.get_fignums()
-    flabels=plt.get_figlabels()
-    for i in rlen(fns):
-        n=fns[i]
-        figure(n)
-        if flabels[i]:
-            s=flabels[i]
-        else:
-            s=str(i)
-        plt.savefig(opj(path,d2p(s,time_str(mode='FileSafe'),'pdf')))
+
 
 #EOF

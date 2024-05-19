@@ -4,6 +4,7 @@ alias sshok='sudo service ssh restart'
 alias rgrep='grep -r -n -I '
 alias enablescripts='chmod -R u+x ~/utilz2/scripts/'
 alias rse='rsync -ravL --exclude *.pth --exclude *.png --exclude *.pth_'
+alias ll='ls -al'
 
 git config --global credential.helper "cache --timeout=86400"
 
