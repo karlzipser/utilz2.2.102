@@ -62,31 +62,12 @@ text=b[e]
 
 metrics_data = parse_metrics(text)
 categories=kys(metrics_data[0]['EvalTraincurrent_metrics'])
+stats={}
 
-#for data in metrics_data:
-#    print(data)
-"""
-def smooth(d):
-    if len(d)>100:
-        d0=na(d)[:len(int(1/100))].mean()
-    e=[d0]
-    for i in rlen(d):
-"""
-#236
-G={}
-"""
-def smooth(d,s=0.9,n=5):
-    d=na(d)
-    e=[]
-    e.append(d[:n].mean())
-    for i in range(1,len(d)):
-        e.append(s*e[i-1]+(1-s)*d[i])
-    return na(e)
-"""
-#k='f1_road'
-#k=select_from_list(categories)
+
+
 for k in categories:
-    if 'IoU' in k:
+    if 'IoU' in k or 'fprate' in k or 'bump' in k or 'island' in k or 'bike' in k or 'edge' in k:
         continue
     bn=[]
     a=[]
@@ -97,7 +78,7 @@ for k in categories:
         data=metrics_data[i]
         d=data['batch_number']
         bn.append(d)
-        a.append(data['EvalTraincurrent_metrics'][k])
+        #a.append(data['EvalTraincurrent_metrics'][k])
         b.append(data['Test_current_metrics'][k])
     a=na(a);a[np.isnan(a)]=0
     b=na(b);b[np.isnan(b)]=0
@@ -105,13 +86,34 @@ for k in categories:
     #clf()
     s=0.985
     #s=1-1/(0.3*len(bn))
-    plot(bn,smooth(a,s),'-',label='train')
-    plot(bn,smooth(b,s),'-',label='test')
+    #plot(bn,smooth(a,s),'-',label='train')
+    if e[-1]=='/':
+        e=e[:-1]
+    plot(bn,smooth(b,s),'-',label=fname(e)+' test')#'test')
     #plot(bn,a,'-',label='train')
     #plot(bn,b,'-',label='test')
     plt.legend(loc='lower right')
     plt.title(k)
-
-
+    ctr=0
+    val=0
+    for i in rlen(bn):
+        if bn[i]<200e3 or bn[i]>400e3:
+            continue
+        val+=b[i]
+        ctr+=1
+    val/=ctr
+    stats[k]=val
+kprint(stats)
+        
+if False:
+    data={}
+    for k in s7:
+        data[k]=[]
+    for k in s6:
+        data[k].append(s6[k])
+    for k in s7:
+        data[k].append(s7[k])
+    df=pd.DataFrame(data)
+    df.to_excel(opjD('output.xlsx'),index=False)
 
 #EOF
