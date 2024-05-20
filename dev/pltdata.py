@@ -96,6 +96,7 @@ for k in categories:
     plt.title(k)
     ctr=0
     val=0
+    """
     for i in rlen(bn):
         if bn[i]<200e3 or bn[i]>400e3:
             continue
@@ -103,6 +104,7 @@ for k in categories:
         ctr+=1
     val/=ctr
     stats[k]=val
+    """
 kprint(stats)
         
 if False:
