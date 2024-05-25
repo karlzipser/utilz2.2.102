@@ -1,6 +1,7 @@
 
 from utilz2.misc import *
 from utilz2.core.u2b_arrays import *
+from utilz2.core.u7_times import *
 import matplotlib
 import matplotlib.pyplot as plt  # the Python plotting package
 plt.ion()
