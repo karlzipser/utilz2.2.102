@@ -185,10 +185,10 @@ def find_files(
     minagedays=0,
     maxagedays=0,
 ):
-    if noisy and ignore:
-        print('Ignorning files in',', '.join(ignore)+'.')
+    #if noisy and ignore:
+    #    print('Ignorning files in',', '.join(ignore)+'.')
     if timer.rcheck() and noisy:
-        print('find_files found',len(file_list),'files')
+        print('find_files found',commas(len(file_list)),'files')
     if __top:
         file_list = []
     if type(patterns) == str:
