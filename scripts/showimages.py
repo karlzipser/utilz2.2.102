@@ -199,7 +199,7 @@ if __name__ == '__main__':
     print('\n\n\n\n\n',__file__)
 
     args=getparser(
-        paths=opjD(),
+        paths=os.getcwd(),
         recursive=False,
         file_types='jpg,jpeg,JPG,JPEG,png,PNG',
         extent=256,
