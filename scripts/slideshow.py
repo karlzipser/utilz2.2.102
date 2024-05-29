@@ -10,7 +10,7 @@ if __name__ == '__main__':
         path=os.getcwd(),
         file_types='jpg,jpeg,JPG,JPEG,png,PNG',
         shuffle=False,
-        delay=1,
+        delay=1.,
         loop=True,
         x=5,
         y=5,
