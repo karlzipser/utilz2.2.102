@@ -109,7 +109,7 @@ def cQ(*args,**kwargs):
     if 'e' in kwargs and not kwargs['e']:
         return
     cprint(d2s_spacer(tuple(list(args)),spacer=' '),'COLOR')
-    if k_in_D('ra',kwargs) or k_in_D('r',kwargs):
+    if k_in_D('ra',kwargs) or k_in_D('r',kwargs) or not len(args):
         cprint('\b  (hit Enter to continue)','COLOR')
         input()
     if k_in_D('t',kwargs):
