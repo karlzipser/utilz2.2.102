@@ -27,11 +27,18 @@ def most_recent_py_file(path=opjh(),return_mtime=False):
             if len(fname) >= 3:
                 if fname[-3:] == '.py':
                     full_path = os.path.join(dirname,fname)
-                    mtime = os.stat(full_path).st_mtime
-                    if mtime > max_mtime:
-                        max_mtime = mtime
-                        max_dir = dirname
-                        max_file = fname
+                    print(full_path)
+                    try:
+                        mtime = os.stat(full_path).st_mtime
+                        if mtime > max_mtime:
+                            max_mtime = mtime
+                            max_dir = dirname
+                            max_file = fname
+                    except Exception as e:
+                        exc_type, exc_obj, exc_tb = sys.exc_info()
+                        file_name = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
+                        print('Exception!')
+                        print(d2s(exc_type,file_name,exc_tb.tb_lineno))   
     if return_mtime:
         return opj(max_dir,max_file),max_mtime
     else:

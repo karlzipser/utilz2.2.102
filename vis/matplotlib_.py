@@ -372,7 +372,7 @@ def savefigs():
             s=flabels[i]
         else:
             s=str(i)
-        plt.savefig(opj(path,d2p(s,time_str(mode='FileSafe'),'pdf')))
+        plt.savefig(opj(path,d2p(s,time_str(mode='FileSafe'),'pdf')),bbox_inches='tight')
 
 
 
