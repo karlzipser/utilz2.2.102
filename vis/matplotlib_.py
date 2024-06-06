@@ -360,8 +360,7 @@ def smooth(d,s=0.9,n=5):
         e.append(s*e[i-1]+(1-s)*d[i])
     return na(e)
 
-def savefigs():
-    path=opjD('figs')
+def savefigs(path=opjD('figs')):
     mkdirp(path)
     fns=plt.get_fignums()
     flabels=plt.get_figlabels()

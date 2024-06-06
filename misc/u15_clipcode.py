@@ -1,6 +1,40 @@
+from utilz2.core.files import *
 from utilz2.misc.u13_printing import *
 from utilz2.misc.u14_have_using import *
 import subprocess
+
+
+def get_code_snippet_2(code_file=None,start='#,a',stop='#,b',snippet_path=opjh('snippets')):
+    """
+    Finds code snippet, saves snippet and figures if any.
+    e.g.,
+        exec(gcsp2(most_recent_py_file(opjD())))
+    """
+    #T0=1717657224.065629
+    if code_file is None:
+        code_file = most_recent_py_file()
+    code_lst = txt_file_to_list_of_strings(code_file)
+    snippet_lst = []
+    started = False
+    for c in code_lst:
+        if not started and c == start:
+            started = True
+        if started and c == stop:
+            break
+        if started:
+            snippet_lst.append(c)
+    code_str = '\n'.join(snippet_lst)
+    cb(code_str)
+    #t1=int(time.time()-T0)
+    snippet_path=opj(snippet_path,d2p(time_str(),fname(code_file)))
+    mkdirp(snippet_path)
+    code_str=code_str.replace(start,d2n(30*'#','\n# WARNING, THIS IS A SNIPPET!'))
+    code_str+='\n#\n'+30*'#'
+    text_to_file(opj(snippet_path,fname(code_file)),code_str)
+    code_str='CA()\n'+code_str+d2n('\nsavefigs(',qtd(snippet_path),')')
+    return code_str
+gcsp2 = get_code_snippet_2
+
 
 def get_code_snippet_(code_file=None,start='#,a',stop='#,b'):
     if code_file is None:
@@ -20,14 +54,15 @@ def get_code_snippet_(code_file=None,start='#,a',stop='#,b'):
 gcsp = get_code_snippet_
 
 
-def most_recent_py_file(path=opjh(),return_mtime=False):
+def most_recent_py_file(path=opjh(),return_mtime=False,e=0):
     max_mtime = 0
     for dirname,subdirs,files in os.walk(path):
         for fname in files:
             if len(fname) >= 3:
                 if fname[-3:] == '.py':
                     full_path = os.path.join(dirname,fname)
-                    print(full_path)
+                    if e:
+                        print(full_path)
                     try:
                         mtime = os.stat(full_path).st_mtime
                         if mtime > max_mtime:
