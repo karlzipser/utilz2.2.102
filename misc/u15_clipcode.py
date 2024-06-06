@@ -3,6 +3,9 @@ from utilz2.misc.u13_printing import *
 from utilz2.misc.u14_have_using import *
 import subprocess
 
+def mkdirp( *args, e=0,r=0,a=1 ):
+    path = opj(*args)
+    os.system('mkdir -p '+path)#, e=e, r=r, a=a )
 
 def get_code_snippet_2(code_file=None,start='#,a',stop='#,b',snippet_path=opjh('snippets')):
     """
@@ -28,7 +31,7 @@ def get_code_snippet_2(code_file=None,start='#,a',stop='#,b',snippet_path=opjh('
     #t1=int(time.time()-T0)
     snippet_path=opj(snippet_path,d2p(time_str(),fname(code_file)))
     mkdirp(snippet_path)
-    code_str=code_str.replace(start,d2n(30*'#','\n# WARNING, THIS IS A SNIPPET!'))
+    code_str=code_str.replace(start,d2n(30*'#','\n# THIS IS A SNIPPET FROM\n# ',code_file))
     code_str+='\n#\n'+30*'#'
     text_to_file(opj(snippet_path,fname(code_file)),code_str)
     code_str='CA()\n'+code_str+d2n('\nsavefigs(',qtd(snippet_path),')')
