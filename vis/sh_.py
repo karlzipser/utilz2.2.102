@@ -689,8 +689,7 @@ def rimsave(f,g,e=False,show=False):
             time.sleep(show)
 
 
-def ope(f):
-    return os.path.exists(f)
+
 
 
 

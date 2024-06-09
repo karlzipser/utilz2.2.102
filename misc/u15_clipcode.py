@@ -1,21 +1,53 @@
 from utilz2.core.files import *
 from utilz2.misc.u13_printing import *
 from utilz2.misc.u14_have_using import *
+from utilz2.misc.u16_sys import *
 import subprocess
 
-def mkdirp( *args, e=0,r=0,a=1 ):
+def mkdirp_( *args, e=0,r=0,a=1 ):
     path = opj(*args)
     os.system('mkdir -p '+path)#, e=e, r=r, a=a )
 
-def get_code_snippet_2(code_file=None,start='#,a',stop='#,b',snippet_path=opjh('snippets')):
+
+def merge_snippets(w='/Users/karlzipser/snippets/working'):
+    from pypdf import PdfMerger
+    assert ope(w)
+    pdfs=find_files(w,['*.pdf'])
+    pdfs = sorted(pdfs, key=get_file_mtime)
+    pdfs.reverse()
+    merger = PdfMerger()
+    for pdf in pdfs:
+        con=False
+        for p in pdf.split('/'):
+            #cg(p,len(p))
+            if len(p) and p[0]=='_':
+                #print('ignoring',p)
+                con=True
+        if con:
+            continue
+        else:
+            pass #print('using',pdf)
+        merger.append(pdf)
+    merger.write(opj(w,'_'+time_str()+'.pdf'))
+    merger.close()
+
+def get_file_mtime(file_path):
+    return os.path.getmtime(file_path)
+
+def get_code_snippet_2(code_file=None,start='#,a',stop='#,b',snippet_path=opjh('snippets'),enscript=True,save_snippet=True,e=0):
     """
     Finds code snippet, saves snippet and figures if any.
     e.g.,
         exec(gcsp2(most_recent_py_file(opjD())))
     """
-    #T0=1717657224.065629
     if code_file is None:
-        code_file = most_recent_py_file()
+        code_file = most_recent_py_file(opjh(),e=e)
+    elif os.path.isdir(code_file):
+        code_file = most_recent_py_file(code_file,e=e)
+    elif os.path.isfile(code_file):
+        pass
+    else:
+        assert False
     code_lst = txt_file_to_list_of_strings(code_file)
     snippet_lst = []
     started = False
@@ -27,13 +59,18 @@ def get_code_snippet_2(code_file=None,start='#,a',stop='#,b',snippet_path=opjh('
         if started:
             snippet_lst.append(c)
     code_str = '\n'.join(snippet_lst)
+    cg('snippet from',code_file)
     cb(code_str)
-    #t1=int(time.time()-T0)
-    snippet_path=opj(snippet_path,d2p(time_str(),fname(code_file)))
-    mkdirp(snippet_path)
+    snippet_path=opj(snippet_path,'working',d2p(time_str(),fname(code_file).replace('.','-')))
+    mkdirp_(snippet_path)
     code_str=code_str.replace(start,d2n(30*'#','\n# THIS IS A SNIPPET FROM\n# ',code_file))
     code_str+='\n#\n'+30*'#'
-    text_to_file(opj(snippet_path,fname(code_file)),code_str)
+    snippet_file_path=opj(snippet_path,fname(code_file))
+    if save_snippet:
+        text_to_file(snippet_file_path,code_str)
+    if enscript:
+        # enscript -E -q -Z -p - -f Courier10 Desktop/temp.py | ps2pdf - out.pdf
+        os_system('enscript -E -q -Z -p - -f Courier10',snippet_file_path,'| ps2pdf -',snippet_file_path.replace('.py','.py.pdf'),e=1,a=1,r=0)
     code_str='CA()\n'+code_str+d2n('\nsavefigs(',qtd(snippet_path),')')
     return code_str
 gcsp2 = get_code_snippet_2
@@ -58,6 +95,9 @@ gcsp = get_code_snippet_
 
 
 def most_recent_py_file(path=opjh(),return_mtime=False,e=0):
+    if path==opjh():
+        cE('using most_recent_py_file(opjh()), can take awhile')
+        time.sleep(3)
     max_mtime = 0
     for dirname,subdirs,files in os.walk(path):
         for fname in files:
@@ -72,7 +112,7 @@ def most_recent_py_file(path=opjh(),return_mtime=False,e=0):
                             max_mtime = mtime
                             max_dir = dirname
                             max_file = fname
-                    except Exception as e:
+                    except Exception as e_:
                         exc_type, exc_obj, exc_tb = sys.exc_info()
                         file_name = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
                         print('Exception!')

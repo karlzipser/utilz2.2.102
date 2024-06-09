@@ -1,7 +1,7 @@
 
 from utilz2.misc.u13_printing import *
 from utilz2.misc.u14_have_using import *
-from utilz2.misc.u15_clipcode import *
+#from utilz2.misc.u15_clipcode import *
 
 
 

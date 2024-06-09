@@ -1,5 +1,8 @@
 from utilz2.core.u2_renaming import *
 
+def ope(f):
+    return os.path.exists(f)
+
 
 def opj(*args):
     if len(args) == 0:
