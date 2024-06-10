@@ -2,6 +2,8 @@ from utilz2.core.u2_renaming import *
 from termcolor import cprint
 from termcolor import colored
 
+#U2G['a']=1
+
 def commas(v):
     return '{:,}'.format(v)
 

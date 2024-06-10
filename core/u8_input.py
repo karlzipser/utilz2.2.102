@@ -1,5 +1,9 @@
 from utilz2.core.u6_printing import *
 
+#print(U2G)
+
+#def tempp():
+#    print(U2G)
 
 def input_int(s='> '):
     c = input(s)

@@ -53,6 +53,7 @@ def get_code_snippet_2(
     save_code=True,
     include_codefile=False,
     include_output=False,
+    show_snippet=False,
     e=0,
 ):
     """
@@ -82,7 +83,8 @@ def get_code_snippet_2(
             snippet_lst.append(c)
     code_str = '\n'.join(snippet_lst)
     cg('snippet from',code_file)
-    cb(code_str)
+    if show_snippet:
+        cb(code_str)
     snippet_path=opj(snippet_path,'working',d2p(time_str(),fname(code_file).replace('.','-')))
     mkdirp_(snippet_path)
     #code_str=code_str.replace(start,d2n(30*'#','\n# THIS IS A SNIPPET FROM\n# ',code_file))
@@ -106,7 +108,7 @@ def get_code_snippet_2(
         os_system('rm',snippet_file_path.replace('.py','.pdf'))
     code_str='CA()\n'+code_str+d2n('\nsavefigs(',qtd(snippet_path),')')
     if include_output:
-        code_str="import sys;orig_stdout = sys.stdout;f=open('out.txt','w')\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
+        code_str="import sys;orig_stdout = sys.stdout;f=open('"+snippet_file_path+"-out.txt','w');sys.stdout=f\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
     return code_str
 gcsp2 = get_code_snippet_2
 

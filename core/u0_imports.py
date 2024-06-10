@@ -1,3 +1,6 @@
+
+U2G=dict()
+
 if False:
     def print(*args, stdout=False, **kwargs):
         import sys
