@@ -50,3 +50,6 @@ pip3 install color_transfer
 # sudo apt install enscript
 # pip install pdfCropMargins
 # pip install pypdf
+# https://pypi.org/project/pdfkit/
+# https://pygments.org/docs/quickstart/
+
