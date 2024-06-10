@@ -54,6 +54,7 @@ def get_code_snippet_2(
     include_codefile=False,
     include_output=False,
     show_snippet=False,
+    crop_code_margins=True,
     e=0,
 ):
     """
@@ -104,8 +105,9 @@ def get_code_snippet_2(
     if enscript:
         # enscript -E -q -Z -p - -f Courier10 Desktop/temp.py | ps2pdf - out.pdf
         os_system('enscript -E -q -Z -p - -f Courier10 --header \'\'',snippet_file_path,'| ps2pdf -',snippet_file_path.replace('.py','.pdf'),e=1,a=1,r=0)
-        os_system('pdfcropmargins',snippet_file_path.replace('.py','.pdf'),'-p 0 -o',snippet_file_path.replace('.py','.py.pdf'),e=1,a=1,r=0)
-        os_system('rm',snippet_file_path.replace('.py','.pdf'))
+        if crop_code_margins:
+            os_system('pdfcropmargins',snippet_file_path.replace('.py','.pdf'),'-p 0 -o',snippet_file_path.replace('.py','.py.pdf'),e=1,a=1,r=0)
+            os_system('rm',snippet_file_path.replace('.py','.pdf'))
     code_str='CA()\n'+code_str+d2n('\nsavefigs(',qtd(snippet_path),')')
     if include_output:
         code_str="import sys;orig_stdout = sys.stdout;f=open('"+snippet_file_path+"-out.txt','w');sys.stdout=f\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
