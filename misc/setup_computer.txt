@@ -46,3 +46,7 @@ pip3 install color_transfer
 # source ~/pytorch_env/pytorch_env/bin/activate
 
 # https://www.sublimetext.com/docs/linux_repositories.html
+
+# sudo apt install enscript
+# pip install pdfCropMargins
+# pip install pypdf

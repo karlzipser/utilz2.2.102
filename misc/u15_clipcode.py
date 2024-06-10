@@ -9,9 +9,9 @@ def mkdirp_( *args, e=0,r=0,a=1 ):
     os.system('mkdir -p '+path)#, e=e, r=r, a=a )
 
 
-def merge_snippets(w='/Users/karlzipser/snippets/working'):
+def merge_snippets(w=opjh('snippets/working')):
     from pypdf import PdfMerger
-    assert ope(w)
+    mkdirp(w)
     pdfs=find_files(w,['*.pdf'])
     pdfs = sorted(pdfs, key=get_file_mtime)
     pdfs.reverse()
@@ -33,6 +33,10 @@ def merge_snippets(w='/Users/karlzipser/snippets/working'):
     merger.close()
     if using_osx():
         os_system('open',f)
+    else:
+        os_system('killall evince')
+        os_system('evince',f,'&')
+
 
 def get_file_mtime(file_path):
     return os.path.getmtime(file_path)
@@ -44,6 +48,7 @@ def get_code_snippet_2(
     snippet_path=opjh('snippets'),
     enscript=True,
     save_snippet=True,
+    save_code=True,
     include_codefile=False,
     e=0,
 ):
@@ -84,6 +89,8 @@ def get_code_snippet_2(
     snippet_file_path=opj(snippet_path,fname(code_file))
     if save_snippet:
         text_to_file(snippet_file_path,code_str)
+    if save_code:
+        text_to_file(snippet_file_path+'-full.py','\n'.join(code_lst))
     if enscript:
         # enscript -E -q -Z -p - -f Courier10 Desktop/temp.py | ps2pdf - out.pdf
         os_system('enscript -E -q -Z -p - -f Courier10 --header \'\'',snippet_file_path,'| ps2pdf -',snippet_file_path.replace('.py','.pdf'),e=1,a=1,r=0)
