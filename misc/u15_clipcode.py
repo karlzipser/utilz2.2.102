@@ -2,6 +2,7 @@ from utilz2.core.files import *
 from utilz2.misc.u13_printing import *
 from utilz2.misc.u14_have_using import *
 from utilz2.misc.u16_sys import *
+from utilz2.misc.u17_osx import *
 import subprocess
 
 def mkdirp_( *args, e=0,r=0,a=1 ):
@@ -32,6 +33,7 @@ def merge_snippets(w=opjh('snippets/working')):
     merger.write(f)
     merger.close()
     if using_osx():
+        quit_Preview()
         os_system('open',f)
     else:
         os_system('killall evince')
@@ -50,6 +52,7 @@ def get_code_snippet_2(
     save_snippet=True,
     save_code=True,
     include_codefile=False,
+    include_output=False,
     e=0,
 ):
     """
@@ -57,6 +60,8 @@ def get_code_snippet_2(
     e.g.,
         exec(gcsp2(most_recent_py_file(opjD())))
     """
+    #if include_output:
+    #    os_system('rm',opjh('out.txt'))
     if code_file is None:
         code_file = most_recent_py_file(opjh(),e=e)
     elif os.path.isdir(code_file):
@@ -88,7 +93,10 @@ def get_code_snippet_2(
     #code_str+='\n#\n'+30*'#'
     snippet_file_path=opj(snippet_path,fname(code_file))
     if save_snippet:
-        text_to_file(snippet_file_path,code_str)
+        code_str2=code_str
+        #if include_output:
+        #    code_str2+='\n'+10*'-'+' output:\n'+file_to_text(opjh('out.txt'))
+        text_to_file(snippet_file_path,code_str2)
     if save_code:
         text_to_file(snippet_file_path+'-full.py','\n'.join(code_lst))
     if enscript:
@@ -97,6 +105,8 @@ def get_code_snippet_2(
         os_system('pdfcropmargins',snippet_file_path.replace('.py','.pdf'),'-p 0 -o',snippet_file_path.replace('.py','.py.pdf'),e=1,a=1,r=0)
         os_system('rm',snippet_file_path.replace('.py','.pdf'))
     code_str='CA()\n'+code_str+d2n('\nsavefigs(',qtd(snippet_path),')')
+    if include_output:
+        code_str="import sys;orig_stdout = sys.stdout;f=open('out.txt','w')\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
     return code_str
 gcsp2 = get_code_snippet_2
 
