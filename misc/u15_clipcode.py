@@ -28,13 +28,25 @@ def merge_snippets(w='/Users/karlzipser/snippets/working'):
         else:
             pass #print('using',pdf)
         merger.append(pdf)
-    merger.write(opj(w,'_'+time_str()+'.pdf'))
+    f=opj(w,'_'+time_str()+'.pdf')
+    merger.write(f)
     merger.close()
+    if using_osx():
+        os_system('open',f)
 
 def get_file_mtime(file_path):
     return os.path.getmtime(file_path)
 
-def get_code_snippet_2(code_file=None,start='#,a',stop='#,b',snippet_path=opjh('snippets'),enscript=True,save_snippet=True,e=0):
+def get_code_snippet_2(
+    code_file=None,
+    start='#,a',
+    stop='#,b',
+    snippet_path=opjh('snippets'),
+    enscript=True,
+    save_snippet=True,
+    include_codefile=False,
+    e=0,
+):
     """
     Finds code snippet, saves snippet and figures if any.
     e.g.,
@@ -63,14 +75,20 @@ def get_code_snippet_2(code_file=None,start='#,a',stop='#,b',snippet_path=opjh('
     cb(code_str)
     snippet_path=opj(snippet_path,'working',d2p(time_str(),fname(code_file).replace('.','-')))
     mkdirp_(snippet_path)
-    code_str=code_str.replace(start,d2n(30*'#','\n# THIS IS A SNIPPET FROM\n# ',code_file))
-    code_str+='\n#\n'+30*'#'
+    #code_str=code_str.replace(start,d2n(30*'#','\n# THIS IS A SNIPPET FROM\n# ',code_file))
+    if include_codefile:
+        code_str=code_str.replace(start,d2n('\n# ',code_file))
+    else:
+        code_str=code_str.replace(start,'')
+    #code_str+='\n#\n'+30*'#'
     snippet_file_path=opj(snippet_path,fname(code_file))
     if save_snippet:
         text_to_file(snippet_file_path,code_str)
     if enscript:
         # enscript -E -q -Z -p - -f Courier10 Desktop/temp.py | ps2pdf - out.pdf
-        os_system('enscript -E -q -Z -p - -f Courier10',snippet_file_path,'| ps2pdf -',snippet_file_path.replace('.py','.py.pdf'),e=1,a=1,r=0)
+        os_system('enscript -E -q -Z -p - -f Courier10 --header \'\'',snippet_file_path,'| ps2pdf -',snippet_file_path.replace('.py','.pdf'),e=1,a=1,r=0)
+        os_system('pdfcropmargins',snippet_file_path.replace('.py','.pdf'),'-p 0 -o',snippet_file_path.replace('.py','.py.pdf'),e=1,a=1,r=0)
+        os_system('rm',snippet_file_path.replace('.py','.pdf'))
     code_str='CA()\n'+code_str+d2n('\nsavefigs(',qtd(snippet_path),')')
     return code_str
 gcsp2 = get_code_snippet_2
