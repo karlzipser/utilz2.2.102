@@ -40,8 +40,156 @@ def merge_snippets(w=opjh('snippets/working')):
         os_system('evince',f,'&')
 
 
+
+
+
+def open_working(w=opjh('snippets/working')):
+    os_system('open -a Firefox',w)
+
+#,a
+def merge_snippets2(
+    w=opjh('snippets/working'),
+    show=True,
+):
+    from pygments import highlight
+    from pygments.lexers import PythonLexer
+    from pygments.formatters import HtmlFormatter
+    css='\n'.join([
+        '<head><style>',
+        HtmlFormatter().get_style_defs('.highlight'),
+        '</style></head>',
+        ' '
+    ])
+    #text_to_file(f.replace('.py','.snippet.html'),div)
+    mkdirp(w)
+
+    fs=find_files(w,['*.snippet.py','*.pdf'])
+    fs = sorted(fs, key=get_file_mtime)
+    fs.reverse()
+    hs=[]
+    for f in fs:
+        con=False
+        for f_ in f.split('/'):
+            if len(f_) and f_[0]=='_':
+                con=True
+        if con:
+            continue
+
+        if '.pdf' in f:
+            div="""
+<div>
+<object data="PDFFILE"
+        type="application/pdf"
+        width="350"
+        height="350">
+        alt : <a href="test.pdf">test.pdf</a>
+</object>
+</div>
+            """.replace('PDFFILE',f)
+        else:
+            txt=file_to_text(f)
+            print(txt)
+            div=highlight(txt,PythonLexer(),HtmlFormatter())
+            div='\n'.join([
+                    """<div style="height:120px;border:1px solid ;overflow:auto;">""",
+                    div,
+                    '</div>\n',
+                ])
+        hs.append(div)
+
+    hs=[css]+["""<a href="file:PATH">PATH</a>""".replace('PATH',w)]+hs
+    htmlfile=opj(w,'_'+time_str()+'.html')
+    text_to_file(
+        htmlfile,
+        '\n'.join(hs)
+    )
+    if using_osx():
+        #quit_Preview()
+        #os_system('open -a Firefox',w)
+        os_system('open -a Firefox',htmlfile)
+    else:
+        os_system('killall evince')
+        os_system('evince',f,'&')
+#,b
+
+
+
+
+
 def get_file_mtime(file_path):
     return os.path.getmtime(file_path)
+
+
+
+
+def get_code_snippet_3(
+    code_file=None,
+    start='#,a',
+    stop='#,b',
+    snippet_path=opjh('snippets'),
+    enscript=True,
+    save_snippet=True,
+    save_code=True,
+    include_codefile=True,
+    include_output=False,
+    show_snippet=True,
+    e=0,
+):
+    if code_file is None:
+        code_file = most_recent_py_file(opjD(),e=e)
+        print('*** Warning, setting src location to',code_file)
+    elif os.path.isdir(code_file):
+        code_file = most_recent_py_file(code_file,e=e)
+    elif os.path.isfile(code_file):
+        pass
+    else:
+        cE('Error, code_file',qtd(code_file),'is not valid.')
+        assert False
+    code_lst = txt_file_to_list_of_strings(code_file)
+    snippet_lst = []
+    started = False
+    for c in code_lst:
+        if not started and c == start:
+            started = True
+        elif started and c == stop:
+            break
+        elif started:
+            snippet_lst.append(c)
+        else:
+            print(qtd(c))
+            #assert False
+    code_str = '\n'.join(snippet_lst)
+    cg('snippet from',code_file)
+    if show_snippet:
+        cb(code_str)
+    snippet_path=opj(snippet_path,'working',d2p(time_str(),fname(code_file).replace('.','-')))
+    mkdirp_(snippet_path)
+    f=opj(snippet_path,fname(code_file))
+    if include_codefile:
+        code_str=d2n('# ',pname(f).replace(pname(snippet_path),''),'\n','# ',code_file,'\n',code_str)
+
+    if save_snippet:
+        text_to_file(f.replace('.py','.snippet.py'),code_str)
+    if save_code:
+        text_to_file(f,'\n'.join(code_lst))
+
+    code_str='\n'.join([
+            'CA()',
+            code_str,
+            d2n('savefigs(',qtd(snippet_path),')'),
+        ])
+
+    if include_output:
+        code_str="import sys;orig_stdout = sys.stdout;f=open('"+f+"-out.txt','w');sys.stdout=f\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
+    return code_str
+gcsp3 = get_code_snippet_3
+
+
+
+
+
+
+
 
 def get_code_snippet_2(
     code_file=None,
