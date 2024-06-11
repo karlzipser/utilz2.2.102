@@ -90,7 +90,7 @@ def merge_snippets2(
         alt : <a href="test.pdf">test.pdf</a>
 </object>
 </div>
-            """.replace('PDFFILE',f)
+            """.replace('PDFFILE',f.replace(w+'/',''))
         else:
             txt=file_to_text(f)
             if txt:
@@ -105,7 +105,8 @@ def merge_snippets2(
         if div:
             hs.append(div)
 
-    hs=[css]+["""<a href="file:PATH">PATH</a>""".replace('PATH',w)]+hs
+    #hs=[css]+["""<a href="file:PATH">PATH</a>""".replace('PATH',w)]+hs
+    hs=[css]+hs
     htmlfile=opj(w,'_'+time_str()+'.html')
     text_to_file(
         htmlfile,
