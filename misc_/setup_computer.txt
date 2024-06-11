@@ -53,3 +53,5 @@ pip3 install color_transfer
 # https://pypi.org/project/pdfkit/
 # https://pygments.org/docs/quickstart/
 
+# https://dev.to/ruthvikraja_mv/how-to-save-the-entire-user-session-using-python-2h2c
+# get_ipython().run_line_magic('save', 'current_session ~0/')
