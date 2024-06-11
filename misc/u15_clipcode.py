@@ -46,11 +46,15 @@ def merge_snippets(w=opjh('snippets/working')):
 def open_working(w=opjh('snippets/working')):
     os_system('open -a Firefox',w)
 
+
 #,a
 def merge_snippets2(
     w=opjh('snippets/working'),
     show=True,
 ):
+    """
+    exec(gcsp3(opjh('utilz2'),include_output=1));merge_snippets2();CA()
+    """
     from pygments import highlight
     from pygments.lexers import PythonLexer
     from pygments.formatters import HtmlFormatter
@@ -63,11 +67,12 @@ def merge_snippets2(
     #text_to_file(f.replace('.py','.snippet.html'),div)
     mkdirp(w)
 
-    fs=find_files(w,['*.snippet.py','*.pdf'])
+    fs=find_files(w,['*.snippet.py','*.pdf','*-out.txt'])
     fs = sorted(fs, key=get_file_mtime)
     fs.reverse()
     hs=[]
     for f in fs:
+        div=''
         con=False
         for f_ in f.split('/'):
             if len(f_) and f_[0]=='_':
@@ -88,14 +93,17 @@ def merge_snippets2(
             """.replace('PDFFILE',f)
         else:
             txt=file_to_text(f)
-            print(txt)
-            div=highlight(txt,PythonLexer(),HtmlFormatter())
-            div='\n'.join([
-                    """<div style="height:120px;border:1px solid ;overflow:auto;">""",
-                    div,
-                    '</div>\n',
-                ])
-        hs.append(div)
+            if txt:
+                if '-out.txt' in f:
+                    txt=d2n('# ',f,'\n',txt)
+                div=highlight(txt,PythonLexer(),HtmlFormatter())
+                div='\n'.join([
+                        """<div style="height:120px;border:1px solid ;overflow:auto;">""",
+                        div,
+                        '</div>\n',
+                    ])
+        if div:
+            hs.append(div)
 
     hs=[css]+["""<a href="file:PATH">PATH</a>""".replace('PATH',w)]+hs
     htmlfile=opj(w,'_'+time_str()+'.html')

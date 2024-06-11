@@ -12,6 +12,7 @@ merger.close()
 figure('test')
 hist(randn(1000))
 
+
 #, a
 figure('test2')
 from sampleimages import imgs
@@ -20,8 +21,10 @@ sh(imgs.mtum,'test2')
 
 #,a
 figure('randn',figsize=(3,1))
-hist(randn(1000))
+hist(randn(100000))
 plt.title('randn')
+for i in range(30):
+	print('hello world',i)
 #,b
 
 
