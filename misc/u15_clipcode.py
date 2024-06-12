@@ -105,7 +105,7 @@ def merge_snippets2(
         type="application/pdf"
         width="WIDTH"
         height="HEIGHT">
-        alt : <a href="test.pdf">test.pdf</a>
+        <!--alt : <a href="test.pdf">test.pdf</a>-->
 </object>
 </div>
             """.replace('PDFFILE',f.replace(w+'/','')).replace('HEIGHT',str(height)).replace('WIDTH',str(width))

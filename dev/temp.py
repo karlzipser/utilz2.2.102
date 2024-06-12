@@ -25,22 +25,23 @@ sh(imgs.water_b_512,'test2')
 #,b
 
 
-
-#, a
-title='randn(h300w600)'
+#,a
+title='randn(h200w400)'
 figure(title,figsize=(3,1))
 hist(randn(100000))
 plt.title(title)
 for i in range(30):
-	print('hello world',i)
+	print('hello world',i*'*')
 #,b
 
-#,a
+
+#, a
 title='mtum(h512w512)'
 figure(title)
 from sampleimages import imgs
 sh(imgs.mtum_512,title=title,e=0)
 #,b
+
 
 #, a
 f=opjD('temp.txt')
