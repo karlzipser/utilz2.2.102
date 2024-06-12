@@ -49,7 +49,7 @@ def open_working(w=opjh('snippets/working')):
 def parse_dimensions(s):
     p=r'\(h(\d+)w(\d+)\)'
     m=re.search(p,s)
-    print(m)
+    #print(m)
     if m:
         h=int(m.group(1))
         w=int(m.group(2))
@@ -60,6 +60,7 @@ def parse_dimensions(s):
 def merge_snippets2(
     w=opjh('snippets/working'),
     show=True,
+    default_height=120,
 ):
     """
     exec(gcsp3(opjh('utilz2'),include_output=1));merge_snippets2();CA()
@@ -76,7 +77,7 @@ def merge_snippets2(
     #text_to_file(f.replace('.py','.snippet.html'),div)
     mkdirp(w)
 
-    fs=find_files(w,['*.snippet.py','*.pdf','*-out.txt'])
+    fs=find_files(w,['*.snippet.py','*.pdf','*-out.txt'],noisy=False)
     fs = sorted(fs, key=get_file_mtime)
     fs.reverse()
     hs=[]
@@ -121,7 +122,7 @@ def merge_snippets2(
                         '</div>\n',
                     ])
             if not height:
-                height=120
+                height=default_height
             div=div.replace('HEIGHT',str(height))
         if div:
             hs.append(div)
@@ -198,7 +199,8 @@ def get_code_snippet_3(
         elif started:
             snippet_lst.append(c)
         else:
-            print(qtd(c))
+            pass
+            #print(qtd(c))
             #assert False
     code_str = '\n'.join(snippet_lst)
     cg('snippet from',code_file)
