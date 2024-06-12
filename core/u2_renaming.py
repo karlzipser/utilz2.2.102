@@ -2,8 +2,8 @@ from utilz2.core.u1_essentials import *
 
 host_name = socket.gethostname()
 home_path = os.path.expanduser("~")
-username = getpass.getuser()
-
+#username = getpass.getuser()
+username=home_path.split('/')[-1]
 sleep = time.sleep
 sys = os.sys
 gg = glob.glob

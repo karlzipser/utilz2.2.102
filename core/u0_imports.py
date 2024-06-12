@@ -50,7 +50,7 @@ imports = (
     #'fnmatch',
     #'h5py',
     'socket',
-    'getpass',
+    #'getpass',
     #'numbers',
     #'math',
     #'pickle',
