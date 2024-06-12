@@ -46,8 +46,17 @@ def merge_snippets(w=opjh('snippets/working')):
 def open_working(w=opjh('snippets/working')):
     os_system('open -a Firefox',w)
 
+def parse_dimensions(s):
+    p=r'\(h(\d+)w(\d+)\)'
+    m=re.search(p,s)
+    print(m)
+    if m:
+        h=int(m.group(1))
+        w=int(m.group(2))
+        return h,w
+    else:
+        return None
 
-#,a
 def merge_snippets2(
     w=opjh('snippets/working'),
     show=True,
@@ -79,23 +88,29 @@ def merge_snippets2(
                 con=True
         if con:
             continue
-
+        dims=parse_dimensions(f)
+        if not isNone(dims):
+            height=dims[1]
+            width=dims[0]
+        else:
+            height=350
+            width=height
         if '.pdf' in f:
             div="""
 <div>
 <object data="PDFFILE"
         type="application/pdf"
-        width="350"
-        height="350">
+        width="HEIGHT"
+        height="WIDTH">
         alt : <a href="test.pdf">test.pdf</a>
 </object>
 </div>
-            """.replace('PDFFILE',f.replace(w+'/',''))
+            """.replace('PDFFILE',f.replace(w+'/','')).replace('HEIGHT',str(height)).replace('WIDTH',str(width))
         else:
             txt=file_to_text(f)
             if txt:
                 if '-out.txt' in f:
-                    txt=d2n('# ',f,'\n',txt)
+                    txt=d2n('# Out: ',pname(f).replace(w,'')[1:],'\n',txt)
                 div=highlight(txt,PythonLexer(),HtmlFormatter())
                 div='\n'.join([
                         """<div style="height:120px;border:1px solid ;overflow:auto;">""",
@@ -113,13 +128,13 @@ def merge_snippets2(
         '\n'.join(hs)
     )
     if using_osx():
-        #quit_Preview()
-        #os_system('open -a Firefox',w)
-        os_system('open -a Firefox',htmlfile)
+        os_system('open -a Firefox',htmlfile,'&')
     else:
-        os_system('killall evince')
-        os_system('evince',f,'&')
-#,b
+        os_system('firefox -new-tab',htmlfile,'&')
+         
+        #os_system('killall evince')
+        #os_system('evince',f,'&')
+
 
 
 
@@ -136,7 +151,6 @@ def get_code_snippet_3(
     start='#,a',
     stop='#,b',
     snippet_path=opjh('snippets'),
-    enscript=True,
     save_snippet=True,
     save_code=True,
     include_codefile=True,
@@ -157,6 +171,14 @@ def get_code_snippet_3(
     code_lst = txt_file_to_list_of_strings(code_file)
     snippet_lst = []
     started = False
+    _code='\n'.join(code_lst)
+    _split=_code.split(start)
+    if len(_split)>2:
+        cE('Error start token',qtds(start),'appears more than once in',code_file)
+        return 'assert False'
+    elif len(_split)<2:
+        cE('Error start token',qtds(start),'does not appear in',code_file)
+        return 'assert False'
     for c in code_lst:
         if not started and c == start:
             started = True
@@ -175,7 +197,7 @@ def get_code_snippet_3(
     mkdirp_(snippet_path)
     f=opj(snippet_path,fname(code_file))
     if include_codefile:
-        code_str=d2n('# ',pname(f).replace(pname(snippet_path),''),'\n','# ',code_file,'\n',code_str)
+        code_str=d2n('# In: ',pname(f).replace(pname(snippet_path),'')[1:],'\n','# ',code_file.replace(opjh(),''),'\n',code_str)
 
     if save_snippet:
         text_to_file(f.replace('.py','.snippet.py'),code_str)
