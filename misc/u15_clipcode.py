@@ -10,7 +10,7 @@ def mkdirp_( *args, e=0,r=0,a=1 ):
     os.system('mkdir -p '+path)#, e=e, r=r, a=a )
 
 
-def merge_snippets(w=opjh('snippets/working')):
+def __merge_snippets(w=opjh('snippets/working')):
     from pypdf import PdfMerger
     mkdirp(w)
     pdfs=find_files(w,['*.pdf'])
@@ -90,18 +90,21 @@ def merge_snippets2(
             continue
         dims=parse_dimensions(f)
         if not isNone(dims):
-            height=dims[1]
-            width=dims[0]
+            height=dims[0]
+            width=dims[1]
         else:
-            height=350
+            height=0
             width=height
         if '.pdf' in f:
+            if not height:
+                height=350
+                width=height
             div="""
 <div>
 <object data="PDFFILE"
         type="application/pdf"
-        width="HEIGHT"
-        height="WIDTH">
+        width="WIDTH"
+        height="HEIGHT">
         alt : <a href="test.pdf">test.pdf</a>
 </object>
 </div>
@@ -113,10 +116,13 @@ def merge_snippets2(
                     txt=d2n('# Out: ',pname(f).replace(w,'')[1:],'\n',txt)
                 div=highlight(txt,PythonLexer(),HtmlFormatter())
                 div='\n'.join([
-                        """<div style="height:120px;border:1px solid ;overflow:auto;">""",
+                        """<div style="height:HEIGHTpx;border:1px solid ;overflow:auto;">""",
                         div,
                         '</div>\n',
                     ])
+            if not height:
+                height=120
+            div=div.replace('HEIGHT',str(height))
         if div:
             hs.append(div)
 
@@ -173,12 +179,17 @@ def get_code_snippet_3(
     started = False
     _code='\n'.join(code_lst)
     _split=_code.split(start)
-    if len(_split)>2:
+    if d2n('start=',qtds(start)) in _code:
+        cE('Error, this appears to be where get_code_snippet is defined, cannot use it here.')
+        assert False
+    elif len(_split)>2:
         cE('Error start token',qtds(start),'appears more than once in',code_file)
         return 'assert False'
     elif len(_split)<2:
         cE('Error start token',qtds(start),'does not appear in',code_file)
         return 'assert False'
+
+        return 'assert False'        
     for c in code_lst:
         if not started and c == start:
             started = True
@@ -222,7 +233,7 @@ gcsp3 = get_code_snippet_3
 
 
 
-def get_code_snippet_2(
+def __get_code_snippet_2(
     code_file=None,
     start='#,a',
     stop='#,b',
@@ -291,7 +302,7 @@ def get_code_snippet_2(
     if include_output:
         code_str="import sys;orig_stdout = sys.stdout;f=open('"+snippet_file_path+"-out.txt','w');sys.stdout=f\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
     return code_str
-gcsp2 = get_code_snippet_2
+#gcsp2 = get_code_snippet_2
 
 
 def get_code_snippet_(code_file=None,start='#,a',stop='#,b'):

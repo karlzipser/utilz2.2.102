@@ -23,6 +23,8 @@ from sampleimages import imgs
 sh(imgs.water_b_512,'test2')
 #,b
 
+
+
 #,a
 figure('randn',figsize=(3,1))
 hist(randn(100000))
