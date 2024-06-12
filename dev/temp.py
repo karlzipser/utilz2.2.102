@@ -12,7 +12,7 @@ figure('test')
 hist(randn(1000))
 
 
-#,a
+#, a
 figure('test2')
 from sampleimages import imgs
 sh(imgs.mtum,'test2')
@@ -27,17 +27,19 @@ sh(imgs.water_b_512,'test2')
 
 
 #, a
-figure('randn',figsize=(3,1))
+title='randn(h300w600)'
+figure(title,figsize=(3,1))
 hist(randn(100000))
-plt.title('randn')
+plt.title(title)
 for i in range(30):
 	print('hello world',i)
 #,b
 
-#, a
-figure('mtum')
+#,a
+title='mtum(h512w512)'
+figure(title)
 from sampleimages import imgs
-sh(imgs.sunny,'mtum')
+sh(imgs.mtum_512,title=title,e=0)
 #,b
 
 #, a

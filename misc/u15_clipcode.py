@@ -97,7 +97,7 @@ def merge_snippets2(
             width=height
         if '.pdf' in f:
             if not height:
-                height=350
+                height=512
                 width=height
             div="""
 <div>

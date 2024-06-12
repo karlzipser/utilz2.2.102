@@ -221,7 +221,7 @@ def sh(
     crop=(0,0,0,0),
     r=0,
     a=1,
-    e=1,
+    e=0,
     t=0,
     include_shape_in_title=True,
  ):
