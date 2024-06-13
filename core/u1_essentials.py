@@ -361,13 +361,20 @@ if True:
                 _.__dict__[k]=val
             def dic(_):
                 return _.__dict__
-            def print(_):
-                kprint(_.__dict__)
+            def print(_,tab=0):
+                d=_.__dict__
+                for k in d:
+                    if 'kws2class' in str(type(d[k])):
+                        print('\t'*tab,k,':')
+                        d[k].print(tab=tab+1)
+                    else:
+                        print('\t'*tab,k,':',d[k])
         b=a()
-        #kprint(default_dic,title='dd')
         for k in default_dic:
             setattr(b,k,default_dic[k])
         return b
+    k2c=kws2class
+
 
 
 
@@ -378,6 +385,17 @@ def packdict(_,locals_):
         if k[0]!='_':
             _.__dict__[k]=locals_[k]
 
+
+#############################################
+################### u2g #####################
+##
+u2g=k2c(
+    a=dict(f=1,g=2),
+    b='asdf'
+)
+##
+#############################################
+#############################################
 
 
 

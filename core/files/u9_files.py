@@ -25,11 +25,11 @@ def list_of_strings_to_txt_file(path_and_filename,str_lst,write_mode="w"):
 
 def text_to_file(f,t,write_mode="w"):
     list_of_strings_to_txt_file(f,t.split('\n'),write_mode=write_mode)
-
+t2f=text_to_file
 
 def file_to_text(f):
     return '\n'.join(txt_file_to_list_of_strings(f))
-
+f2t=file_to_text
 
 def assert_disk_locations(locations):
     if type(locations) == str:

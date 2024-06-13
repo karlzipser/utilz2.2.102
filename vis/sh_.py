@@ -66,10 +66,10 @@ if False:
             def print(_):
                 kprint(_.__dict__)
         b=a()
-        #kprint(default_dic,title='dd')
         for k in default_dic:
             setattr(b,k,default_dic[k])
         return b
+
 
 
 try:

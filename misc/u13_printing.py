@@ -519,14 +519,14 @@ def get_lists_of_paths(path_list):
     return list_of_paths, blanked_list_of_paths
 
 
-
+"""
 def prints(*args,**kwargs):
     import sys
     import builtins
     if 'altout' in U2G:
         builtins.print(*args,file=U2G['altout'],**kwargs)
     return builtins.print(*args,file=sys.stdout,**kwargs)
-
+"""
     
 
 #EOF

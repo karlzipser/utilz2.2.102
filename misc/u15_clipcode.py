@@ -40,22 +40,35 @@ def __merge_snippets(w=opjh('snippets/working')):
         os_system('evince',f,'&')
 
 
-
+def open_url(url):
+    if using_osx():
+        os_system('open -a Firefox',url,'&')
+    else:
+        os_system('firefox -new-tab',url,'&')
 
 
 def open_working(w=opjh('snippets/working')):
-    os_system('open -a Firefox',w)
+    open_url(w)
+
 
 def parse_dimensions(s):
     p=r'\(h(\d+)w(\d+)\)'
     m=re.search(p,s)
-    #print(m)
     if m:
         h=int(m.group(1))
         w=int(m.group(2))
         return h,w
     else:
         return None
+
+
+def u2merge():
+    exec(f2t(opjh('utilz2/scripts/u2g.py')))
+    merge_snippets2(
+        w=u2g.sn.dst,
+        show=u2g.sn.show,
+        default_height=u2g.sn.default_height,
+    )
 
 def merge_snippets2(
     w=opjh('snippets/working'),
@@ -64,6 +77,9 @@ def merge_snippets2(
 ):
     """
     exec(gcsp3(opjh('utilz2'),include_output=1));merge_snippets2();CA()
+    u2g.sn.src=opjh('utilz2')
+    u2g.sn.dst=opjh('snippets/working')
+    exec(gcsp3(u2g.spath,include_output=1));merge_snippets2();CA()
     """
     from pygments import highlight
     from pygments.lexers import PythonLexer
@@ -74,9 +90,7 @@ def merge_snippets2(
         '</style></head>',
         ' '
     ])
-    #text_to_file(f.replace('.py','.snippet.html'),div)
     mkdirp(w)
-
     fs=find_files(w,['*.snippet.py','*.pdf','*-out.txt'],noisy=False)
     fs = sorted(fs, key=get_file_mtime)
     fs.reverse()
@@ -126,30 +140,24 @@ def merge_snippets2(
             div=div.replace('HEIGHT',str(height))
         if div:
             hs.append(div)
-
-    #hs=[css]+["""<a href="file:PATH">PATH</a>""".replace('PATH',w)]+hs
     hs=[css]+hs
     htmlfile=opj(w,'_'+time_str()+'.html')
     text_to_file(
         htmlfile,
         '\n'.join(hs)
     )
+    """
     if using_osx():
         os_system('open -a Firefox',htmlfile,'&')
     else:
         os_system('firefox -new-tab',htmlfile,'&')
-         
-        #os_system('killall evince')
-        #os_system('evince',f,'&')
-
-
-
+    """
+    open_url(htmlfile)
 
 
 
 def get_file_mtime(file_path):
     return os.path.getmtime(file_path)
-
 
 
 
@@ -200,8 +208,6 @@ def get_code_snippet_3(
             snippet_lst.append(c)
         else:
             pass
-            #print(qtd(c))
-            #assert False
     code_str = '\n'.join(snippet_lst)
     cg('snippet from',code_file)
     if show_snippet:
