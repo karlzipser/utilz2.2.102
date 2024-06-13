@@ -3,19 +3,41 @@ from utilz2.misc.u13_printing import *
 from utilz2.misc.u14_have_using import *
 from utilz2.misc.u16_sys import *
 from utilz2.misc.u17_osx import *
-from utilz2.vis import *
 import subprocess
-
-
-def runu2():
-    exec(f2t(opjh('utilz2/scripts/u2.py')))
-    u2.print()
-runu2()
-
 
 def mkdirp_( *args, e=0,r=0,a=1 ):
     path = opj(*args)
     os.system('mkdir -p '+path)#, e=e, r=r, a=a )
+
+
+def __merge_snippets(w=opjh('snippets/working')):
+    from pypdf import PdfMerger
+    mkdirp(w)
+    pdfs=find_files(w,['*.pdf'])
+    pdfs = sorted(pdfs, key=get_file_mtime)
+    pdfs.reverse()
+    merger = PdfMerger()
+    for pdf in pdfs:
+        con=False
+        for p in pdf.split('/'):
+            #cg(p,len(p))
+            if len(p) and p[0]=='_':
+                #print('ignoring',p)
+                con=True
+        if con:
+            continue
+        else:
+            pass #print('using',pdf)
+        merger.append(pdf)
+    f=opj(w,'_'+time_str()+'.pdf')
+    merger.write(f)
+    merger.close()
+    if using_osx():
+        quit_Preview()
+        os_system('open',f)
+    else:
+        os_system('killall evince')
+        os_system('evince',f,'&')
 
 
 def open_url(url):
@@ -25,12 +47,8 @@ def open_url(url):
         os_system('firefox -new-tab',url,'&')
 
 
-def open_src():
-    open_url(u2.sn.src)
-
-
-def open_dst():
-    open_url(u2.sn.dst)
+def open_working(w=opjh('snippets/working')):
+    open_url(w)
 
 
 def parse_dimensions(s):
@@ -44,83 +62,24 @@ def parse_dimensions(s):
         return None
 
 
-def esm():
-    runu2()
-    try:
-        s=gcsp3(
-            code_file=          u2.sn.src,
-            snippet_path=       pname(u2.sn.dst),
-            save_snippet=       u2.sn.save_snippet,
-            save_code=          u2.sn.save_code,
-            include_codefile=   u2.sn.include_codefile,
-            include_output=     u2.sn.include_output,
-            show_snippet=       u2.sn.show_snippet,
-            e=                  u2.sn.e,
-        )
-        exec(s)
-    except KeyboardInterrupt:
-        sys.stdout=u2.stdout
-        cr('*** KeyboardInterrupt ***')
-        sys.exit()
-    except Exception as e:
-        sys.stdout=u2.stdout
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        file_name = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print('Exception!')
-        print(d2s(exc_type,file_name,exc_tb.tb_lineno))
-    merge_snippets(
-        w=u2.sn.dst,
-        show=u2.sn.show,
-        default_height=u2.sn.default_height,
-    )
-    CA()
-
-
-def esp():
-    runu2()
-    try:
-        s=gcsp3(
-            code_file=          u2.sn.src,
-            snippet_path=       pname(u2.sn.dst),
-            save_snippet=       False,
-            save_code=          False,
-            include_codefile=   False,
-            include_output=     False,
-            show_snippet=       u2.sn.show_snippet,
-            e=                  u2.sn.e,
-        )
-        exec(s)
-    except KeyboardInterrupt:
-        sys.stdout=u2.stdout
-        cr('*** KeyboardInterrupt ***')
-        sys.exit()
-    except Exception as e:
-        sys.stdout=u2.stdout
-        exc_type, exc_obj, exc_tb = sys.exc_info()
-        file_name = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
-        print('Exception!')
-        print(d2s(exc_type,file_name,exc_tb.tb_lineno))
-
-    
 def u2merge():
-    exec(f2t(opjh('utilz2/scripts/u2.py')))
-    merge_snippets(
-        w=u2.sn.dst,
-        show=u2.sn.show,
-        default_height=u2.sn.default_height,
+    exec(f2t(opjh('utilz2/scripts/u2g.py')))
+    merge_snippets2(
+        w=u2g.sn.dst,
+        show=u2g.sn.show,
+        default_height=u2g.sn.default_height,
     )
 
-
-def merge_snippets(
+def merge_snippets2(
     w=opjh('snippets/working'),
     show=True,
     default_height=120,
 ):
     """
-    exec(gcsp3(opjh('utilz2'),include_output=1));merge_snippets();CA()
-    u2.sn.src=opjh('utilz2')
-    u2.sn.dst=opjh('snippets/working')
-    exec(gcsp3(u2.spath,include_output=1));merge_snippets();CA()
+    exec(gcsp3(opjh('utilz2'),include_output=1));merge_snippets2();CA()
+    u2g.sn.src=opjh('utilz2')
+    u2g.sn.dst=opjh('snippets/working')
+    exec(gcsp3(u2g.spath,include_output=1));merge_snippets2();CA()
     """
     from pygments import highlight
     from pygments.lexers import PythonLexer
@@ -131,7 +90,7 @@ def merge_snippets(
         '</style></head>',
         ' '
     ])
-    mkdirp_(w)
+    mkdirp(w)
     fs=find_files(w,['*.snippet.py','*.pdf','*-out.txt'],noisy=False)
     fs = sorted(fs, key=get_file_mtime)
     fs.reverse()
@@ -187,14 +146,22 @@ def merge_snippets(
         htmlfile,
         '\n'.join(hs)
     )
+    """
+    if using_osx():
+        os_system('open -a Firefox',htmlfile,'&')
+    else:
+        os_system('firefox -new-tab',htmlfile,'&')
+    """
     open_url(htmlfile)
+
 
 
 def get_file_mtime(file_path):
     return os.path.getmtime(file_path)
 
 
-def get_code_snippet(
+
+def get_code_snippet_3(
     code_file=None,
     start='#,a',
     stop='#,b',
@@ -202,7 +169,7 @@ def get_code_snippet(
     save_snippet=True,
     save_code=True,
     include_codefile=True,
-    include_output=True,
+    include_output=False,
     show_snippet=True,
     e=0,
 ):
@@ -245,27 +212,123 @@ def get_code_snippet(
     cg('snippet from',code_file)
     if show_snippet:
         cb(code_str)
+    snippet_path=opj(snippet_path,'working',d2p(time_str(),fname(code_file).replace('.','-')))
+    mkdirp_(snippet_path)
+    f=opj(snippet_path,fname(code_file))
+    if include_codefile:
+        code_str=d2n('# In: ',pname(f).replace(pname(snippet_path),'')[1:],'\n','# ',code_file.replace(opjh(),''),'\n',code_str)
+
     if save_snippet:
-        snippet_path=opj(snippet_path,'working',d2p(time_str(),fname(code_file).replace('.','-')))
-        mkdirp_(snippet_path)
-        f=opj(snippet_path,fname(code_file))
-        if include_codefile:
-            code_str=d2n('# In: ',pname(f).replace(pname(snippet_path),'')[1:],'\n','# ',code_file.replace(opjh(),''),'\n',code_str)
+        text_to_file(f.replace('.py','.snippet.py'),code_str)
+    if save_code:
+        text_to_file(f,'\n'.join(code_lst))
 
-        if save_snippet:
-            text_to_file(f.replace('.py','.snippet.py'),code_str)
-        if save_code:
-            text_to_file(f,'\n'.join(code_lst))
+    code_str='\n'.join([
+            'CA()',
+            code_str,
+            d2n('savefigs(',qtd(snippet_path),')'),
+        ])
 
-        code_str='\n'.join([
-                'CA()',
-                code_str,
-                d2n('savefigs(',qtd(snippet_path),')'),
-            ])
-        if include_output:
-            code_str="import sys;orig_stdout = sys.stdout;f=open('"+f+"-out.txt','w');sys.stdout=f\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
+    if include_output:
+        code_str="import sys;orig_stdout = sys.stdout;f=open('"+f+"-out.txt','w');sys.stdout=f\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
     return code_str
-gcsp3 = get_code_snippet
+gcsp3 = get_code_snippet_3
+
+
+
+
+
+
+
+
+def __get_code_snippet_2(
+    code_file=None,
+    start='#,a',
+    stop='#,b',
+    snippet_path=opjh('snippets'),
+    enscript=True,
+    save_snippet=True,
+    save_code=True,
+    include_codefile=False,
+    include_output=False,
+    show_snippet=False,
+    crop_code_margins=True,
+    e=0,
+):
+    """
+    Finds code snippet, saves snippet and figures if any.
+    e.g.,
+        exec(gcsp2(most_recent_py_file(opjD())))
+    """
+    #if include_output:
+    #    os_system('rm',opjh('out.txt'))
+    if code_file is None:
+        code_file = most_recent_py_file(opjh(),e=e)
+    elif os.path.isdir(code_file):
+        code_file = most_recent_py_file(code_file,e=e)
+    elif os.path.isfile(code_file):
+        pass
+    else:
+        assert False
+    code_lst = txt_file_to_list_of_strings(code_file)
+    snippet_lst = []
+    started = False
+    for c in code_lst:
+        if not started and c == start:
+            started = True
+        if started and c == stop:
+            break
+        if started:
+            snippet_lst.append(c)
+    code_str = '\n'.join(snippet_lst)
+    cg('snippet from',code_file)
+    if show_snippet:
+        cb(code_str)
+    snippet_path=opj(snippet_path,'working',d2p(time_str(),fname(code_file).replace('.','-')))
+    mkdirp_(snippet_path)
+    #code_str=code_str.replace(start,d2n(30*'#','\n# THIS IS A SNIPPET FROM\n# ',code_file))
+    if include_codefile:
+        code_str=code_str.replace(start,d2n('\n# ',code_file))
+    else:
+        code_str=code_str.replace(start,'')
+    #code_str+='\n#\n'+30*'#'
+    snippet_file_path=opj(snippet_path,fname(code_file))
+    if save_snippet:
+        code_str2=code_str
+        #if include_output:
+        #    code_str2+='\n'+10*'-'+' output:\n'+file_to_text(opjh('out.txt'))
+        text_to_file(snippet_file_path,code_str2)
+    if save_code:
+        text_to_file(snippet_file_path+'-full.py','\n'.join(code_lst))
+    if enscript:
+        # enscript -E -q -Z -p - -f Courier10 Desktop/temp.py | ps2pdf - out.pdf
+        os_system('enscript -E -q -Z -p - -f Courier10 --header \'\'',snippet_file_path,'| ps2pdf -',snippet_file_path.replace('.py','.pdf'),e=1,a=1,r=0)
+        if crop_code_margins:
+            os_system('pdfcropmargins',snippet_file_path.replace('.py','.pdf'),'-p 0 -o',snippet_file_path.replace('.py','.py.pdf'),e=1,a=1,r=0)
+            os_system('rm',snippet_file_path.replace('.py','.pdf'))
+    code_str='CA()\n'+code_str+d2n('\nsavefigs(',qtd(snippet_path),')')
+    if include_output:
+        code_str="import sys;orig_stdout = sys.stdout;f=open('"+snippet_file_path+"-out.txt','w');sys.stdout=f\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
+    return code_str
+#gcsp2 = get_code_snippet_2
+
+
+def get_code_snippet_(code_file=None,start='#,a',stop='#,b'):
+    if code_file is None:
+        code_file = most_recent_py_file()
+    code_lst = txt_file_to_list_of_strings(code_file)
+    snippet_lst = []
+    started = False
+    for c in code_lst:
+        if not started and c == start:
+            started = True
+        if started and c == stop:
+            break
+        if started:
+            snippet_lst.append(c)
+    code_str = '\n'.join(snippet_lst)
+    return code_str
+gcsp = get_code_snippet_
 
 
 def most_recent_py_file(path=opjh(),return_mtime=False,e=0):

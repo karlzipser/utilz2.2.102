@@ -16,6 +16,9 @@ title = plt.title
 plt.ion()
 plt.show()
 PP,FF = plt.rcParams,'figure.figsize'
+def mkdirp_( *args, e=0,r=0,a=1 ):
+    path = opj(*args)
+    os.system('mkdir -p '+path)#, e=e, r=r, a=a )
 
 MacOSX = False
 if '/Users/' in home_path:
@@ -361,7 +364,7 @@ def smooth(d,s=0.9,n=5):
     return na(e)
 
 def savefigs(path=opjD('figs')):
-    mkdirp(path)
+    mkdirp_(path)
     fns=plt.get_fignums()
     flabels=plt.get_figlabels()
     for i in rlen(fns):
