@@ -44,19 +44,39 @@ def parse_dimensions(s):
         return None
 
 
+def u2gcsp():
+    runu2()
+    s=gcsp(
+        code_file=          u2.sn.src,
+        snippet_path=       pname(u2.sn.dst),
+        save_snippet=       u2.sn.save_snippet,
+        save_code=          u2.sn.save_code,
+        include_codefile=   u2.sn.include_codefile,
+        include_output=     u2.sn.include_output,
+        show_snippet=       u2.sn.show_snippet,
+        e=                  u2.sn.e,
+    )
+    return s
+
+def u2merge():
+    runu2()
+    merge_snippets(
+        w=u2.sn.dst,
+        show=u2.sn.show,
+        default_height=u2.sn.default_height,
+    )
+
+
+def u2do():
+    s=u2gcsp()
+    s=s+'\n\nu2merge()\n'
+    return s
+
+
 def esm():
     runu2()
     try:
-        s=gcsp3(
-            code_file=          u2.sn.src,
-            snippet_path=       pname(u2.sn.dst),
-            save_snippet=       u2.sn.save_snippet,
-            save_code=          u2.sn.save_code,
-            include_codefile=   u2.sn.include_codefile,
-            include_output=     u2.sn.include_output,
-            show_snippet=       u2.sn.show_snippet,
-            e=                  u2.sn.e,
-        )
+        s=u2gcsp()
         exec(s)
     except KeyboardInterrupt:
         sys.stdout=u2.stdout
@@ -68,18 +88,14 @@ def esm():
         file_name = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print('Exception!')
         print(d2s(exc_type,file_name,exc_tb.tb_lineno))
-    merge_snippets(
-        w=u2.sn.dst,
-        show=u2.sn.show,
-        default_height=u2.sn.default_height,
-    )
+    u2merge()
     CA()
 
 
-def esp():
+def esp(use_except=True):
     runu2()
-    try:
-        s=gcsp3(
+    if True:#try:
+        s=gcsp(
             code_file=          u2.sn.src,
             snippet_path=       pname(u2.sn.dst),
             save_snippet=       False,
@@ -90,6 +106,7 @@ def esp():
             e=                  u2.sn.e,
         )
         exec(s)
+    """
     except KeyboardInterrupt:
         sys.stdout=u2.stdout
         cr('*** KeyboardInterrupt ***')
@@ -100,9 +117,10 @@ def esp():
         file_name = os.path.split(exc_tb.tb_frame.f_code.co_filename)[1]
         print('Exception!')
         print(d2s(exc_type,file_name,exc_tb.tb_lineno))
-
+    """
     
-def u2merge():
+
+def ___u2merge():
     exec(f2t(opjh('utilz2/scripts/u2.py')))
     merge_snippets(
         w=u2.sn.dst,
@@ -117,10 +135,10 @@ def merge_snippets(
     default_height=120,
 ):
     """
-    exec(gcsp3(opjh('utilz2'),include_output=1));merge_snippets();CA()
+    exec(gcsp(opjh('utilz2'),include_output=1));merge_snippets();CA()
     u2.sn.src=opjh('utilz2')
     u2.sn.dst=opjh('snippets/working')
-    exec(gcsp3(u2.spath,include_output=1));merge_snippets();CA()
+    exec(gcsp(u2.spath,include_output=1));merge_snippets();CA()
     """
     from pygments import highlight
     from pygments.lexers import PythonLexer
@@ -265,7 +283,7 @@ def get_code_snippet(
         if include_output:
             code_str="import sys;orig_stdout = sys.stdout;f=open('"+f+"-out.txt','w');sys.stdout=f\n"+code_str+"\nsys.stdout=orig_stdout;f.close()\n"
     return code_str
-gcsp3 = get_code_snippet
+gcsp = get_code_snippet
 
 
 def most_recent_py_file(path=opjh(),return_mtime=False,e=0):
