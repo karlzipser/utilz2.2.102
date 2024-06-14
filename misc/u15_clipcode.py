@@ -187,8 +187,10 @@ def merge_snippets(
             txt=file_to_text(f)
             if txt:
                 if '-out.txt' in f:
-                    txt=d2n('# Out: ',pname(f).replace(w,'')[1:],'\n',txt)
-                div=highlight(txt,PythonLexer(),HtmlFormatter())
+                    #div=d2n('<div style="white-space: pre-line;"># Out: ',pname(f).replace(w,'')[1:],'\n',txt,'</div>')
+                    div=d2n('<div style="white-space: pre-line;">',txt,'</div>')
+                else:
+                    div=highlight(txt,PythonLexer(),HtmlFormatter())
                 div='\n'.join([
                         """<div style="height:HEIGHTpx;border:1px solid ;overflow:auto;">""",
                         div,
