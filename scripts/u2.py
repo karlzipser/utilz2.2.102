@@ -2,7 +2,7 @@
 ################### u2g #####################
 ##
 u2.sn=k2c(
-        src=                    opjD(),#opjh('knets/dev/dnets2'),
+        src=                    opjh('tac_ideal'),
         dst=                    opjh('snippets/working'),
         show=                   True,
         default_height=         400,
@@ -10,7 +10,7 @@ u2.sn=k2c(
         save_snippet=           True,
         save_code=              True,
         include_codefile=       True,
-        include_output=         False,
+        include_output=         True,
         show_snippet=           True,
         e=                      0,
     )
