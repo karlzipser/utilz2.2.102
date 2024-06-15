@@ -45,7 +45,7 @@ imports = (
     #'datetime',
     #'random',
     're',
-    #'subprocess',
+    'subprocess',
     #'threading',
     #'serial',
     #'inspect',
