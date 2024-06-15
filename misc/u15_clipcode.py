@@ -7,10 +7,11 @@ from utilz2.vis import *
 import subprocess
 
 
-def runu2():
+def runu2(e=1):
     exec(f2t(opjh('utilz2/scripts/u2.py')))
-    u2.print()
-runu2()
+    if e:
+        u2.print()
+runu2(e=0)
 
 
 def mkdirp_( *args, e=0,r=0,a=1 ):
@@ -44,8 +45,9 @@ def parse_dimensions(s):
         return None
 
 
-def u2gcsp():
-    runu2()
+def u2gcsp(run_=True):
+    if run_:
+        runu2()
     s=gcsp(
         code_file=          u2.sn.src,
         snippet_path=       pname(u2.sn.dst),
@@ -58,8 +60,9 @@ def u2gcsp():
     )
     return s
 
-def u2merge():
-    runu2()
+def u2merge(run_=True):
+    if run_:
+        runu2()
     merge_snippets(
         w=u2.sn.dst,
         show=u2.sn.show,
@@ -69,7 +72,7 @@ def u2merge():
 
 def u2do():
     s=u2gcsp()
-    s=s+'\n\nu2merge()\n'
+    s=s+'\n\nu2merge(run_=False)\n'
     return s
 
 
