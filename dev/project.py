@@ -1,5 +1,5 @@
 from utilz2 import *
-
+# python3 utilz2/dev/project.py --src Desktop/tac --tag himac1
 args=dict(
     src='',
     tag='',
@@ -17,7 +17,7 @@ def run_project(src,repos=[opjh('UTILS_')]):
 	dst=opjh('project_'+name,s)
 	mkdirp(dst)
 	os_system('rsync -ravL',src,dst,e=1,a=1)
-	for d in ['env','figures','weights','stats']:
+	for d in ['env','figures','net/weights','stats']:
 		mkdirp(opj(dst,name,d))
 	for d in repos:
 		os_system('rsync -ravL',d,opj(dst,name,'env'),e=1,a=1)
