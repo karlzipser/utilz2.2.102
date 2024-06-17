@@ -72,7 +72,7 @@ def u2merge(run_=True):
 
 def u2do():
     s=u2gcsp()
-    s=s+'\n\nu2merge(run_=False)\n'
+    s=s+'\n\nu2merge()\n'
     return s
 
 

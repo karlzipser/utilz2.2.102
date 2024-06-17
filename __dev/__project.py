@@ -1,19 +1,19 @@
 from utilz2 import *
-# python3 utilz2/dev/project.py --src Desktop/tac --tag himac1
+# python3 utilz2/dev/project.py --src tac --tag himac1
 args=dict(
     src='',
     tag='',
     termout=True,
 )
 p=getparser(**args)
-assert p.src
+assert ope(p.src)
 
 
 def run_project(src,repos=[opjh('UTILS_')]):
 	name=fname(src)
 	s=time_str()
 	if p.tag:
-		s+='_'+get_safe_name(p.tag)
+		s+='-'+get_safe_name(p.tag)
 	dst=opjh('project_'+name,s)
 	mkdirp(dst)
 	os_system('rsync -ravL',src,dst,e=1,a=1)

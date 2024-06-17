@@ -2,7 +2,7 @@
 ################### u2g #####################
 ##
 u2.sn=k2c(
-        src=                    opjh('tac_ideal'),
+        src=                    opjh('kmodule'),
         dst=                    opjh('snippets/working'),
         show=                   True,
         default_height=         400,
