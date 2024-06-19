@@ -29,7 +29,10 @@ def kprint(
     if type(item) in ignore_types:
         return
     if not title:
-        title=d2n('(type ',typename(item),')')
+        if showtype:
+            title=d2n('(type ',typename(item),')')
+        else:
+            title=''
     if type(title) not in [str,type(None)]:
         title = str(title)
     lst = []
@@ -43,8 +46,6 @@ def kprint(
     if numbering:
         if type(item) in [dict,list]:
             n_equals = cf(' (n=',len(item),')','`w-d',s0='',s1='')
-
-            n_equals
 
     if title != None:
         if len(title) > len(indent_text):
@@ -76,6 +77,7 @@ def kprint(
             kprint(i,title=None,spaces=spaces+space_increment,space_increment=space_increment,ignore_keys=ignore_keys,only_keys=only_keys,ignore_types=ignore_types,numbering=numbering,
                 max_items=max_items,
                 array_shape_only=array_shape_only,
+                showtype=showtype,
             )
             ctr += 1
             #cm(ctr,max_items)
@@ -100,6 +102,7 @@ def kprint(
             kprint(item[k],title=k,spaces=spaces+space_increment,space_increment=space_increment,ignore_keys=ignore_keys,only_keys=only_keys,ignore_types=ignore_types,numbering=numbering,
                 max_items=max_items,
                 array_shape_only=array_shape_only,
+                showtype=showtype,
             )
             ctr += 1
             if ctr >= max_items:
