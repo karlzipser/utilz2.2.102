@@ -1,9 +1,13 @@
 from utilz2.core.u6_printing import *
 
-def time_sleep(seconds):
+def _time_sleep(seconds):
     start_time = time.time()
     while time.time() - start_time < seconds:
         pass
+
+def time_sleep(s):
+    from threading import Event
+    Event().wait(s)
 
 class Timer:
     def __init__(self, time_s=0):
