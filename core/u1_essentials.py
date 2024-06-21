@@ -349,6 +349,10 @@ if True:
 
 
 import torch
+def get_terminal_size():
+    rows, columns = os.popen('stty size', 'r').read().split()
+    return int(rows),int(columns)
+
 def kws2class(*args,**kwargs):
     default_dic=kws2dict(*args,**kwargs)
     class a:
@@ -400,9 +404,9 @@ def kws2class(*args,**kwargs):
                 else:
                     value_indent = indent + (box_chars['space'] if is_current_last else box_chars['updown'])
                     if 'array' in str(type(value)):
-                      value=d2n('array',shape(value))
+                      value='array'+str(np.shape(value))
                     elif 'Tensor' in str(type(value)):
-                      value=d2n('tensor',shape_from_tensor(value))
+                      value='tensor'+str(np.shape( value.cpu().detach().numpy() ))
                     svalue=value_indent + box_chars['corner'] + str(value)
                     w=get_terminal_size()[1]
                     if w<len(svalue):
@@ -424,10 +428,10 @@ def kws2class(*args,**kwargs):
                 else:
                     c='┠'
                 if 'kws2class' in str(type(d[k])):
-                    print(d2n('\t'*tab+c,_.name_plus_boxchars(k)))
+                    print('\t'*tab+c+_.name_plus_boxchars(k))
                     d[k].print(tab=tab+1)
                 else:
-                    print(d2n('\t'*tab+c,k,'=',d[k]))
+                    print('\t'*tab+c+k+'='+d[k])
 
     b=a()
     for k in default_dic:

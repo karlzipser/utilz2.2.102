@@ -123,9 +123,7 @@ for color in ['red','yellow','green','blue','magenta','cyan','white','Grey']:
     exec(an_exec_string)
 
 
-def get_terminal_size():
-    rows, columns = os.popen('stty size', 'r').read().split()
-    return int(rows),int(columns)
+
 
 
 def format_row(list_of_sym_percent_pairs):
