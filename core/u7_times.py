@@ -1,5 +1,14 @@
 from utilz2.core.u6_printing import *
 
+def _time_sleep(seconds):
+    start_time = time.time()
+    while time.time() - start_time < seconds:
+        pass
+
+def time_sleep(s):
+    from threading import Event
+    Event().wait(s)
+
 class Timer:
     def __init__(self, time_s=0):
         self.time_s = time_s
@@ -41,7 +50,7 @@ class Timer:
         self.message(d2s(i,int(100*i/(1.0*i_max)),'%'),color='white')
     def wait(self):
         while not(self.check()):
-            time.sleep(self.time_s/100.0)
+            time_sleep(self.time_s/100.0)
         self.reset()   
 
 

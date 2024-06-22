@@ -347,34 +347,129 @@ if True:
         for k in __:
             self.__dict__[k]=__[k]
 
+#,a
+import torch
+def get_terminal_size():
+    rows, columns = os.popen('stty size', 'r').read().split()
+    return int(rows),int(columns)
 
-    def kws2class(*args,**kwargs):
-        default_dic=kws2dict(*args,**kwargs)
-        class a:
-            def __init__(_):
-                pass
-            def keys(_):
-                return _.__dict__.keys()
-            def get(_,k):
-                return _.__dict__[k]
-            def set(_,k,val):
-                _.__dict__[k]=val
-            def dic(_):
-                return _.__dict__
-            def print(_,tab=0):
-                d=_.__dict__
-                for k in d:
-                    if 'kws2class' in str(type(d[k])):
-                        print('\t'*tab,k,':')
-                        d[k].print(tab=tab+1)
-                    else:
-                        print('\t'*tab,k,':',d[k])
-        b=a()
-        for k in default_dic:
-            setattr(b,k,default_dic[k])
-        return b
-    k2c=kws2class
+def kws2class(*args,**kwargs):
+    default_dic=kws2dict(*args,**kwargs)
+    class a:
+        def __init__(_):
+            pass
+        #def keys(_):
+        #    return _.__dict__.keys()
+        def get(_,k):
+            return _.__dict__[k]
+        def set(_,k,val):
+            _.__dict__[k]=val
+        def dic(_):
+            return _.__dict__
+        def name_plus_boxchars(_,a):
+            boxchars='──────┐'
+            if len(a)>len(boxchars):
+                return a
+            return a+boxchars[len(a)-1:]
+        def keys(_):
+            ks=list(_.__dict__.keys())
+            if 'ti' in ks:
+                ks.remove('ti')
+            return ks
+        def see(_,indent='', is_last=True):
+            """ Recursively prints a dictionary as a tree with box drawing characters """
+            box_chars = {
+                'updown': '│  ',
+                'branch': '├──',
+                'corner': '└──',
+                'space': '   ',
+            }
+            d=_.__dict__
+            if not indent and 'ti' in d:
+                print(d['ti'])
+            keys = list(d.keys())
+            if 'ti' in keys:
+                keys.remove('ti')
+            for i, key in enumerate(keys):
+                is_current_last = (i == len(keys) - 1)
+                connector = box_chars['corner'] if is_current_last else box_chars['branch']
+                
+                
+                
+                value = d[key]
+                if 'kws2class' in str(type(value)):#isinstance(value, dict):
+                    print(indent + connector + str(key))
+                    new_indent = indent + (box_chars['space'] if is_current_last else box_chars['updown'])
+                    #print('---',is_current_last)
+                    value.see(new_indent, is_last=is_current_last)
+                else:
+                    value_indent = indent + connector + str(key+':')
+                    #value_indent = indent + (box_chars['space'] if is_current_last else box_chars['updown'])
+                    if 'array' in str(type(value)):
+                      value='array'+str(np.shape(value))
+                    elif 'Tensor' in str(type(value)):
+                      value='tensor'+str(np.shape( value.cpu().detach().numpy() ))
+                    #svalue=value_indent + box_chars['corner'] + str(value)
+                    svalue=value_indent + ' ' + str(value)
+                    w=get_terminal_size()[1]
+                    if w<len(svalue):
+                      svalue=svalue[:w-3]+'...'
+                    print(svalue)
+        def _print(_,tab=0):
+            d=_.__dict__
+            if not tab and 'ti' in d:
+                print(' '+_.name_plus_boxchars(d['ti']))
+                _.print(tab=1)
+                return
+            ks=kys(d)
+            if 'ti' in ks:
+                ks.remove('ti')
+            for i in rlen(ks):
+                k=ks[i]
+                if i==len(ks)-1:
+                    c='┖'
+                else:
+                    c='┠'
+                if 'kws2class' in str(type(d[k])):
+                    print('\t'*tab+c+_.name_plus_boxchars(k))
+                    d[k].print(tab=tab+1)
+                else:
+                    print('\t'*tab+c+k+'='+d[k])
 
+    b=a()
+    for k in default_dic:
+        setattr(b,k,default_dic[k])
+    return b
+k2c=kws2class
+if False:
+    a=k2c(b=1,c=k2c(d=torch.randn(2,2),e=k2c(d=rndn(3,3),eee=k2c(b=1,cccccccczzz=k2c(d=1,e=k2c(d=1,e=dict(a=1,b=2,c=3))))),f=list(range(1000))),ti='a')
+    a.see()
+
+#,b
+
+def print_tree(d, indent='', is_last=True):
+    """ Recursively prints a dictionary as a tree with box drawing characters """
+    box_chars = {
+        'updown': '│  ',
+        'branch': '├──',
+        'corner': '└──',
+        'space': '   ',
+    }
+
+    keys = list(d.keys())
+    for i, key in enumerate(keys):
+        is_current_last = (i == len(keys) - 1)
+        connector = box_chars['corner'] if is_current_last else box_chars['branch']
+        
+        print(indent + connector + str(key))
+        
+        value = d[key]
+        if isinstance(value, dict):
+            new_indent = indent + (box_chars['space'] if is_current_last else box_chars['updown'])
+            print_tree(value, new_indent, is_last=is_current_last)
+        else:
+            value_indent = indent + (box_chars['space'] if is_current_last else box_chars['updown'])
+            print(value_indent + box_chars['corner'] + str(value))
 
 
 
@@ -392,7 +487,8 @@ def packdict(_,locals_):
 u2=k2c(
     t0=time.time(),
     stdout=sys.stdout,
-    data=k2c(i=0),
+    #data=k2c(i=0),
+    ti='u2',
 )
 ##
 #############################################
@@ -405,6 +501,8 @@ if __name__ == '__main__':
     print("int(1.9) =",int(1.9))
     print("intr(1.9) =",str(intr(1.9)))
     print()
+    a=k2c(b=1,c=k2c(d=1,e=k2c(d=1,eee=k2c(b=1,c=k2c(d=1,e=k2c(d=1,e=2)))),f=3333),ti='aaaa')
+    a.print()
 
     
 #EOF

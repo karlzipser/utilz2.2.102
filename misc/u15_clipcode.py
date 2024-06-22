@@ -10,7 +10,7 @@ import subprocess
 def runu2(e=1):
     exec(f2t(opjh('utilz2/scripts/u2.py')))
     if e:
-        u2.print()
+        u2.see()
 runu2(e=0)
 
 
@@ -191,7 +191,7 @@ def merge_snippets(
             if txt:
                 if '-out.txt' in f:
                     #div=d2n('<div style="white-space: pre-line;"># Out: ',pname(f).replace(w,'')[1:],'\n',txt,'</div>')
-                    div=d2n('<div style="white-space: pre-line;">',txt,'</div>')
+                    div=d2n('<div style="white-space: pre-line;">',txt.replace(' ','&nbsp;&nbsp;&nbsp;'),'</div>')
                 else:
                     div=highlight(txt,PythonLexer(),HtmlFormatter())
                 div='\n'.join([
@@ -222,11 +222,11 @@ def get_code_snippet(
     start='#,a',
     stop='#,b',
     snippet_path=opjh('snippets'),
-    save_snippet=True,
-    save_code=True,
-    include_codefile=True,
-    include_output=True,
-    show_snippet=True,
+    save_snippet=False,
+    save_code=False,
+    include_codefile=False,
+    include_output=False,
+    show_snippet=False,
     e=0,
 ):
     if code_file is None:
