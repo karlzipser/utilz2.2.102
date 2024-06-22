@@ -487,7 +487,7 @@ def packdict(_,locals_):
 u2=k2c(
     t0=time.time(),
     stdout=sys.stdout,
-    data=k2c(i=0),
+    #data=k2c(i=0),
     ti='u2',
 )
 ##
