@@ -2,10 +2,10 @@
 ################### u2g #####################
 ##
 u2.sn=k2c(
-        src=                    opjh('kdev'),
+        src=                    opjh('projutils'),
         dst=                    opjh('snippets/working'),
         show=                   True,
-        default_height=         100,
+        default_height=         64,
         confirm=                True,
         save_snippet=           True,
         save_code=              True,
