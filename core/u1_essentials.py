@@ -357,25 +357,27 @@ def kws2class(*args,**kwargs):
     default_dic=kws2dict(*args,**kwargs)
     class a:
         def __init__(_):
-            pass
+            _.reserved_keys=['ti','di']
+            _.di=_.__dict__
         #def keys(_):
         #    return _.__dict__.keys()
         def get(_,k):
             return _.__dict__[k]
         def set(_,k,val):
             _.__dict__[k]=val
-        def dic(_):
-            return _.__dict__
+        def d(_,k):
+            return _.__dict__[k]
         def name_plus_boxchars(_,a):
             boxchars='──────┐'
             if len(a)>len(boxchars):
                 return a
             return a+boxchars[len(a)-1:]
-        def keys(_):
-            ks=list(_.__dict__.keys())
-            if 'ti' in ks:
-                ks.remove('ti')
-            return ks
+        def ks(_):
+            ks_=kys(_.__dict__)
+            for k in _.reserved_keys:
+                if k in ks_:
+                    ks_.remove(k)
+            return ks_
         def see(_,indent='', is_last=True):
             """ Recursively prints a dictionary as a tree with box drawing characters """
             box_chars = {
