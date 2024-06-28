@@ -224,6 +224,7 @@ def sh(
     e=0,
     t=0,
     include_shape_in_title=True,
+    save_path='',
  ):
     assert type(fignum) in [int,str]
     assert type(title) == str
@@ -290,6 +291,7 @@ def sh(
             include_shape_in_title=include_shape_in_title,
             titles_font_scale=titles_font_scale,
             display_key_replacements=display_key_replacements,
+            save_path=save_path,
         )
 
 
@@ -339,6 +341,7 @@ def sh(
             t=t,
             include_shape_in_title=include_shape_in_title,
             display_key_replacements=display_key_replacements,
+            save_path=save_path,
         )
         return inpt
 
@@ -379,6 +382,7 @@ def sh(
                 t=t,
                 include_shape_in_title=include_shape_in_title,
                 display_key_replacements=display_key_replacements,
+                save_path=save_path,
             )
             #sh( fix_up_image_list( vis_square2( inpt ) ) , padsize=4, padval=0.5 ) ) )
     elif type(inpt)==torch.Tensor:
@@ -432,6 +436,12 @@ def sh(
         plt.axis('off')
 
     plt.title(title)
+
+    if save_path:
+        plt.savefig(
+            opj(save_path,time_str()+'-'+get_safe_name(title)+'.png'),
+            bbox_inches='tight')
+
     if use_spause:
         spause()
     if e:
