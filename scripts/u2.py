@@ -2,7 +2,7 @@
 ################### u2g #####################
 ##
 u2.sn=k2c(
-        src=                    opjh('projutils'),
+        src=                    opjh('tac'),
         dst=                    opjh('snippets/working'),
         show=                   True,
         default_height=         256,
